@@ -35,6 +35,7 @@ input,select,textarea{padding:7px 8px;border:1px solid var(--line);border-radius
 body.cv #card{display:block}body.cv #form{display:none}
 .gal{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.th{position:relative}.th img{height:90px;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}.th button{position:absolute;top:3px;right:3px;padding:0 7px;line-height:1.5}#big div{width:min(900px,100%)}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
+.sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -83,7 +84,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 </div></div>
 <script>
 const SEC=[
-["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["icsi","ICSI","c"],["dx","Diagnosis","a"]]],
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","a"]]],
 ["Respiratory support",[["o2","Oxygen","s",["Room air","Free Flow","Nasal","CPAP","MV"]],
 ["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
 ["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
@@ -93,8 +94,9 @@ const SEC=[
 ["IV fluids",[["ivt","Fluid type","t"],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
 ["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]]]],
 ["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","t"]]],
+["Examination",[["","Respiratory","h"],["ex_ae","Air entry","t"],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT (sec)","n"],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","t"],["ex_suck","Suckling reflex","t"],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
 ["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["anc","ANC (/µL)","n"],["ret","Retics (%)","n"]]],
-["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB (hours)","n"],["dbil","Direct bili (mg/dl)","n"],["bg","Blood group baby / mother","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
+["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB (hours)","n"],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT (U/L)","n"],["ast","AST (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
 ["Blood gas",[["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan & notes","a"]]]];
@@ -109,7 +111,8 @@ function build(){
  for(const[t,fs]of SEC){
   h+=`<fieldset><legend>${t}</legend><div class="g">`;
   for(const[id,l,ty,o,c]of fs){
-   const w=ty=="a"?" w2":"";
+   const w=ty=="a"||ty=="w"?" w2":"";
+   if(ty=="h"){h+=`<div class="sub">${l}</div>`;continue}
    const dc=c?` data-if="${c}"`:"";
    if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
    h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option>${x}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
@@ -149,7 +152,7 @@ function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEac
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
  return{f,meds,labs,imgs:imgs.slice()}}
-function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||"";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||(!r&&e.dataset.k=="o2"?"Room air":"");if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);calc()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
@@ -177,7 +180,7 @@ function cardHTML(r){const f=r.f;
  const it=(l,v,full)=>v?`<span class="${full?"full":""}"><b>${l}:</b> ${esc(v)}</span>`:"";
  const out=[];
  const lab=(id,l,u)=>f[id]?it(l,f[id]+(u?" "+u:"")):"";
- const a=[it("Sex",f.sex),it("Born",f.dob),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",[f.mode,f.icsi&&"ICSI"].filter(Boolean).join(", ")),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1)].filter(Boolean);
+ const a=[it("Sex",f.sex),it("Born",f.dob),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",f.mode),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1),it("Notes",f.dxn,1)].filter(Boolean);
  out.push(g("Baby",a));
  out.push(g("Respiratory",[it("Support",f.o2=="MV"?"MV"+(f.mvc?" (Conventional)":f.mvh?" (High frequency)":""):f.o2),it("Flow",f.flow&&f.flow+" L/min"),
   it("FiO₂",(f.cp_fio2||f.cv_fio2||f.hf_fio2)&&(f.cp_fio2||f.cv_fio2||f.hf_fio2)+"%"),it("PIP",f.cv_pip&&f.cv_pip+" cmH₂O"),it("PEEP",(f.cp_peep||f.cv_peep)&&(f.cp_peep||f.cv_peep)+" cmH₂O"),
@@ -187,8 +190,12 @@ function cardHTML(r){const f=r.f;
  out.push(g("Feeding",[it("Type",f.fdt),it("Volume",f.fdv&&f.fdv+" ml"),it("Every",f.fdf&&f.fdf+" h"),it("Route",f.fdr)].filter(Boolean)));
  out.push(g("Phototherapy",[it("Type",f.pt),it("Started",f.pts),it("Notes",f.ptn)].filter(Boolean)));
  out.push(g("Medications",r.meds.map(m=>it(m.n,[m.d,m.r,m.f].filter(Boolean).join(" · "))||`<span><b>${esc(m.n)}</b></span>`)));
+ out.push(g("Exam: Respiratory",[it("Air entry",f.ex_ae),it("RR",f.ex_rr&&f.ex_rr+" /min"),it("Notes",f.ex_rn)].filter(Boolean)));
+ out.push(g("Exam: CVS",[it("HR",f.ex_hr&&f.ex_hr+" /min"),it("CRT",f.ex_crt&&f.ex_crt+" sec"),it("Notes",f.ex_cn)].filter(Boolean)));
+ out.push(g("Exam: CNS",[it("Activity",f.ex_act),it("Moro reflex",f.ex_moro),it("Suckling reflex",f.ex_suck),it("Notes",f.ex_nn)].filter(Boolean)));
+ out.push(g("Exam: Renal",[it("UOP",f.ex_uop&&f.ex_uop+" mL/kg/hr"),it("Notes",f.ex_un)].filter(Boolean)));
  out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("anc","ANC"),lab("ret","Retics","%")].filter(Boolean)));
- out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" h":"")):it("Age at TSB",f.tsba&&f.tsba+" h"),lab("dbil","Direct","mg/dl"),it("Blood group",f.bg),it("Coombs",f.coombs)].filter(Boolean)));
+ out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" h":"")):it("Age at TSB",f.tsba&&f.tsba+" h"),lab("dbil","Direct","mg/dl"),it("Blood group (baby)",f.bgb),it("Blood group (mother)",f.bgm),it("Coombs",f.coombs)].filter(Boolean)));
  out.push(g("Chemistry",[lab("crp","CRP","mg/L"),lab("glu","RBS","mg/dl"),lab("na","Na"),lab("k","K"),lab("ca","Ca"),lab("ur","Urea"),lab("cr","Creat"),lab("alt","ALT"),lab("ast","AST"),lab("alb","Alb")].filter(Boolean)));
  out.push(g("Blood gas",[lab("ph","pH"),lab("pco2","pCO₂"),lab("hco3","HCO₃"),lab("be","BE"),lab("lac","Lactate")].filter(Boolean)));
  out.push(g("Other labs",r.labs.map(l=>it(l.n,l.v))));
@@ -213,10 +220,10 @@ function caseText(r){
  let t=(f.age?(an?"An ":"A ")+f.age+"-day-old ":"A ")+(sex?sex+" ":"")+"neonate";
  const born=[];if(f.ga)born.push("at "+f.ga+" weeks of gestation");if(f.mode)born.push("by "+(f.mode==="NVD"?"normal vaginal delivery":"cesarean section"));
  if(born.length)t+=", born "+born.join(" ");
- if(f.icsi)t+=born.length?" (conceived by intracytoplasmic sperm injection)":" (conceived by ICSI)";
  if(f.bw)t+=", with a birth weight of "+f.bw+" g";
  t+=(born.length||f.bw?",":"")+" is admitted to the neonatal intensive care unit (NICU)"+(f.dx?" for "+f.dx:"")+".";
  const s1=[];
+  if(f.dxn)s1.push(/[.!?]$/.test(f.dxn)?f.dxn:f.dxn+".");
  if(f.dadm)s1.push(P+" is on hospital day "+f.dadm+".");
  if(d.PMA)s1.push("Postmenstrual age is "+d.PMA.replace("wks","weeks")+".");
  if(f.cw)s1.push(Q+" current weight is "+f.cw+" g.");
@@ -240,16 +247,19 @@ function caseText(r){
  if(r.meds.length)o.push("Current medications include "+j(r.meds.map(m=>m.n+[m.d,m.r,m.f].filter(Boolean).map(x=>" "+x).join(""))).replace(/ {2,}/g," ")+".");
  const L=(n,v,u)=>v?n+": "+v+(u?nu(u)+u:""):"";
  const labs=[L("Hemoglobin",f.hb,"g/dL"),L("Hematocrit",f.hct,"%"),L("Platelets",f.plt,"×10³/µL"),L("Leukocytes (TLC)",f.tlc,"×10³/µL"),L("Absolute neutrophil count",f.anc,"/µL"),L("Reticulocytes",f.ret,"%"),
-  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" hours of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate/mother)",f.bg),f.coombs?"Direct Coombs test: "+f.coombs:"",
+  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" hours of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate)",f.bgb),L("Blood group (mother)",f.bgm),f.coombs?"Direct Coombs test: "+f.coombs:"",
   L("C-reactive protein",f.crp,"mg/L"),L("Glucose",f.glu,"mg/dL"),L("Sodium",f.na,"mmol/L"),L("Potassium",f.k,"mmol/L"),L("Calcium",f.ca,"mg/dL"),L("Urea",f.ur,"mg/dL"),L("Creatinine",f.cr,"mg/dL"),L("ALT",f.alt,"U/L"),L("AST",f.ast,"U/L"),L("Albumin",f.alb,"g/dL"),
   L("Arterial pH",f.ph),L("pCO₂",f.pco2,"mmHg"),L("HCO₃⁻",f.hco3,"mmol/L"),L("Base excess",f.be,"mmol/L"),L("Lactate",f.lac,"mmol/L"),...r.labs.map(l=>L(l.n,l.v))].filter(Boolean);
  const out=[[t,...s1].join(" ")];
  if(o.length)out.push(o.join(" "));
+ const X=(n,a)=>{a=a.filter(Boolean);return a.length?n+": "+a.join(", "):""};
+ const exl=[X("Respiratory",[f.ex_ae&&"air entry "+f.ex_ae,pv("RR",f.ex_rr,"/min"),f.ex_rn]),X("Cardiovascular",[pv("HR",f.ex_hr,"/min"),pv("CRT",f.ex_crt,"sec"),f.ex_cn]),X("CNS",[f.ex_act&&"activity "+f.ex_act,f.ex_moro&&"Moro reflex "+f.ex_moro,f.ex_suck&&"suckling reflex "+f.ex_suck,f.ex_nn]),X("Renal",[pv("urine output",f.ex_uop,"mL/kg/h"),f.ex_un])].filter(Boolean);
+ if(exl.length)out.push("Physical examination:\n"+exl.join("\n"));
  if(labs.length)out.push("Laboratory studies show the following:\n"+labs.join("\n"));
  if(f.plan)out.push("Additional information: "+f.plan);
  return out.join("\n\n")}
 async function copyTxt(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();let ok=false;try{ok=document.execCommand("copy")}catch(x){}a.remove();return ok}}
-$("#bCopy").onclick=async()=>{const r=collect();if(!Object.keys(r.f).length&&!r.meds.length&&!r.labs.length){say("Nothing to copy yet.");return}say(await copyTxt(caseText(r))?"Case scenario copied.":"Copy failed in this browser.")};
+$("#bCopy").onclick=async()=>{const r=collect();if(!Object.keys(r.f).filter(k=>!(k=="o2"&&r.f.o2=="Room air")).length&&!r.meds.length&&!r.labs.length){say("Nothing to copy yet.");return}say(await copyTxt(caseText(r))?"Case scenario copied.":"Copy failed in this browser.")};
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
@@ -260,7 +270,7 @@ $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
 $("#bClose").onclick=()=>$("#dlg").classList.remove("on");
 $("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,o);persist();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
-build();persist();renderList();setInterval(renderTrash,6e4);
+build();fill(null);persist();renderList();setInterval(renderTrash,6e4);
 </script>
 </body>
 </html>
