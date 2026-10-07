@@ -67,6 +67,7 @@ body.cv #card{display:block}body.cv #form{display:none}
   <button id="bAll">Print all (PDF)</button>
   <button id="bCopy" title="Copy as case scenario" aria-label="Copy as case scenario" style="padding:8px 10px">📋</button>
   <button class="d" id="bDel">Delete</button>
+  <button class="d" id="bReset">Reset</button>
   <span id="msg" style="align-self:center;color:var(--acc)" role="status"></span>
  </div>
  <div id="form"></div>
@@ -250,6 +251,10 @@ function caseText(r){
 async function copyTxt(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();let ok=false;try{ok=document.execCommand("copy")}catch(x){}a.remove();return ok}}
 $("#bCopy").onclick=async()=>{const r=collect();if(!Object.keys(r.f).length&&!r.meds.length&&!r.labs.length){say("Nothing to copy yet.");return}say(await copyTxt(caseText(r))?"Case scenario copied.":"Copy failed in this browser.")};
 $("#big").onclick=()=>$("#big").classList.remove("on");
+$("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
+ if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
+ if(!confirm("Final confirmation: erase ALL data now?"))return;
+ db={};tr={};cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
 $("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
 $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
