@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NICU Baby</title>
+<style>
+:root{--bg:#f2f6f7;--panel:#fff;--ink:#17303a;--mute:#5d737b;--line:#cbd8db;--acc:#0f6e73;--acc2:#dcebec;--bad:#b4391b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b20;--panel:#16272d;--ink:#e3eef0;--mute:#8fa7ae;--line:#2c4249;--acc:#4fc0c6;--acc2:#1c3a40;--bad:#ff8a6b}}
+:root[data-theme="dark"]{--bg:#0f1b20;--panel:#16272d;--ink:#e3eef0;--mute:#8fa7ae;--line:#2c4249;--acc:#4fc0c6;--acc2:#1c3a40;--bad:#ff8a6b}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,legend,.cname{font-family:Georgia,"Times New Roman",serif}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+aside{background:var(--panel);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:10px;max-height:100vh;position:sticky;top:0;overflow:auto}
+aside h1{font-size:20px;margin:0;color:var(--acc)}
+#list{display:flex;flex-direction:column;gap:4px;flex:1}
+.item{padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:transparent;color:inherit;text-align:left;font:inherit}
+.item small{display:block;color:var(--mute)}.item.on{background:var(--acc2);border-color:var(--acc)}
+main{padding:16px;max-width:980px;width:100%}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:2}
+button,input,select,textarea{font:inherit;color:inherit}
+button{padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--panel);cursor:pointer}
+button.p{background:var(--acc);border-color:var(--acc);color:#fff}button.d{color:var(--bad)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+fieldset{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:0 0 12px;padding:10px 14px 14px}
+legend{font-size:17px;padding:0 6px;color:var(--acc)}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+label{display:flex;flex-direction:column;font-size:12.5px;color:var(--mute);gap:3px}
+input,select,textarea{padding:7px 8px;border:1px solid var(--line);border-radius:5px;background:var(--bg);width:100%;font-size:15px}
+.w2{grid-column:1/-1}.row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px}
+.row.l{grid-template-columns:2fr 1fr auto}
+.calc{color:var(--acc);font-size:13px;margin-top:8px}
+#card{display:none;background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px}
+body.cv #card{display:block}body.cv #form{display:none}
+.gal{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.th{position:relative}.th img{height:90px;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}.th button{position:absolute;top:3px;right:3px;padding:0 7px;line-height:1.5}#big div{width:min(900px,100%)}
+[hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
+#all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
+.chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
+.cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
+.csec h2{font-size:12.5px;margin:0 0 3px;padding:1px 6px;background:#e4e4e4;color:#000}
+.cg{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:13px;padding:0 4px}.cg b{font-weight:600}
+.cg .full{flex-basis:100%}
+.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
+.dlg textarea{height:200px}
+@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}}
+@media print{body{background:#fff}aside,.bar,#form,.dlg{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+ <h1>NICU Baby</h1>
+ <button class="p" id="bNew">+ New baby</button>
+ <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
+ <div id="list"></div>
+ <div id="trash"></div>
+ <button id="bBak">Backup / restore</button>
+ <small id="warn" style="color:var(--bad)"></small>
+</aside>
+<main>
+ <div class="bar">
+  <button class="p" id="bSave">Save baby</button>
+  <button id="bView">Preview card</button>
+  <button id="bPrint">Print card</button>
+  <button id="bAll">Print all (PDF)</button>
+  <button id="bCopy" title="Copy as case scenario" aria-label="Copy as case scenario" style="padding:8px 10px">📋</button>
+  <button class="d" id="bDel">Delete</button>
+  <span id="msg" style="align-self:center;color:var(--acc)" role="status"></span>
+ </div>
+ <div id="form"></div>
+ <div id="card"></div>
+ <div id="all"></div>
+</main>
+</div>
+<div class="dlg" id="big" role="dialog" aria-label="Image viewer"><div><img id="bigimg" alt="" style="max-width:100%;max-height:75vh;display:block;margin:auto"><p style="text-align:center;margin:8px 0 0"><small>Click anywhere to close</small></p></div></div>
+<div class="dlg" id="dlg"><div>
+ <p>Copy this text to keep a backup. To restore, paste a backup here and press Restore.</p>
+ <textarea id="bakt" aria-label="Backup data"></textarea>
+ <p><button class="p" id="bRes">Restore</button> <button id="bClose">Close</button></p>
+</div></div>
+<script>
+const SEC=[
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["icsi","ICSI","c"],["dx","Diagnosis","a"]]],
+["Respiratory support",[["o2","Oxygen","s",["Room air","Free Flow","Nasal","CPAP","MV"]],
+["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
+["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
+["mvc","Conventional","c",0,"o2=MV"],["mvh","High frequency","c",0,"o2=MV"],
+["cv_fio2","FiO₂ (%)","n",0,"o2=MV&mvc=Yes"],["cv_pip","PIP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_peep","PEEP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_freq","Frequency (/min)","n",0,"o2=MV&mvc=Yes"],["cv_ti","Ti (sec)","n",0,"o2=MV&mvc=Yes"],
+["hf_fio2","FiO₂ (%)","n",0,"o2=MV&mvh=Yes"],["hf_map","MAP (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_dp","Delta P (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_ti","Ti (sec)","n",0,"o2=MV&mvh=Yes"],["hf_freq","Frequency (Hz)","n",0,"o2=MV&mvh=Yes"]]],
+["IV fluids",[["ivt","Fluid type","t"],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
+["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]]]],
+["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","t"]]],
+["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["anc","ANC (/µL)","n"],["ret","Retics (%)","n"]]],
+["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB (hours)","n"],["dbil","Direct bili (mg/dl)","n"],["bg","Blood group baby / mother","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
+["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT (U/L)","n"],["ast","AST (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
+["Blood gas",[["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
+["Plan / notes",[["plan","Plan & notes","a"]]]];
+const $=s=>document.querySelector(s);
+let imgs=[],db={},tr={},cur=null,mem=false;const DAY=864e5;
+try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}")}catch(e){mem=true}
+const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
+const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function build(){
+ let h="";
+ for(const[t,fs]of SEC){
+  h+=`<fieldset><legend>${t}</legend><div class="g">`;
+  for(const[id,l,ty,o,c]of fs){
+   const w=ty=="a"?" w2":"";
+   const dc=c?` data-if="${c}"`:"";
+   if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
+   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option>${x}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
+  }
+  h+=`</div>`;
+  if(t=="Feeding")h+=`<div class="calc" id="calc"></div>`;
+  if(t=="Phototherapy")h+=`</fieldset><fieldset><legend>Medications</legend><div id="meds"></div><button id="aMed">+ Add medication</button>`;
+  if(t=="Blood gas")h+=`</fieldset><fieldset><legend>Other labs</legend><div id="labs"></div><button id="aLab">+ Add lab</button></fieldset><fieldset><legend>Attachments (images)</legend><div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`;
+  h+=`</fieldset>`;
+ }
+ $("#form").innerHTML=h;
+ $("#aMed").onclick=()=>medRow();$("#aLab").onclick=()=>labRow();
+ $("#imgIn").onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith("image/"))continue;const m=await shrink(f);if(m)imgs.push(m)}e.target.value="";drawImgs();say("Image added. Press Save baby to keep it.")};
+ $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}upd();calc()};
+}
+function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res({n:file.name,d:c.toDataURL("image/jpeg",.72)})};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
+function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{const w=document.createElement("div");w.className="th";const im=new Image();im.src=m.d;im.alt=m.n;im.title="Click to enlarge";
+ im.onclick=()=>{$("#bigimg").src=m.d;$("#big").classList.add("on")};
+ const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs()};w.append(im,x);el.append(w)})}
+function medRow(v={}){const d=document.createElement("div");d.className="row";
+ d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
+ d.lastChild.onclick=()=>d.remove();$("#meds").append(d)}
+function labRow(v={}){const d=document.createElement("div");d.className="row l";
+ d.innerHTML=`<input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
+ d.lastChild.onclick=()=>d.remove();$("#labs").append(d)}
+const num=k=>parseFloat(($(`[data-k="${k}"]`)||{}).value);
+function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=parseFloat(f.cw)||parseFloat(f.bw);
+ if(ga>=0&&ag>=0){const t=ga+ag/7;o.push(["PMA",`${Math.floor(t)}+${Math.round((t%1)*7)} wks`])}
+ if(r>0&&w>0)o.push(["IV fluid",`${(r*24/(w/1000)).toFixed(0)} ml/kg/day`]);
+ const fv=parseFloat(f.fdv),ff=parseFloat(f.fdf);
+ if(fv>0&&ff>0&&w>0)o.push(["Feeds",`${(fv*24/ff/(w/1000)).toFixed(0)} ml/kg/day`]);
+ return o}
+function calc(){$("#calc").textContent=derived(collect().f).map(x=>x[0]+": "+x[1]).join("   |   ")}
+const gv=id=>{const e=$(`[data-k="${id}"]`);return e?(e.type=="checkbox"?(e.checked?"Yes":""):e.value):""};
+function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.dataset.if.split("&").every(c=>{const[a,b]=c.split("=");return b.split("|").includes(gv(a))})})}
+function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;const v=gv(e.dataset.k).trim();if(v!=="")f[e.dataset.k]=v});
+ const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
+ const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
+ return{f,meds,labs,imgs:imgs.slice()}}
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||"";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+ $("#meds").innerHTML="";$("#labs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);calc()}
+const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
+function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
+ el.innerHTML=ks.length?"<small>Recently deleted (restore within 24 h)</small>":"";
+ ks.forEach(k=>{const h=Math.max(0,Math.ceil((DAY-(Date.now()-tr[k].del))/36e5));const w=document.createElement("div");w.style.cssText="display:flex;gap:4px";
+  const b=document.createElement("button");b.className="item";b.style.flex="1";
+  b.innerHTML=`Restore: ${esc(tr[k].rec.f.name)}<small>${h} h left</small>`;
+  b.onclick=()=>{if(db[k]&&!confirm("A baby with this name exists now. Replace it with the deleted record?"))return;db[k]=tr[k].rec;delete tr[k];cur=k;persist();fill(db[k]);setView(false);renderList();say("Restored.")};
+  const x=document.createElement("button");x.className="d";x.textContent="🗑";x.title="Delete permanently";x.setAttribute("aria-label","Delete "+tr[k].rec.f.name+" permanently");
+  x.onclick=()=>{if(confirm("Permanently delete this record? This cannot be undone.")){delete tr[k];persist();renderTrash();say("Permanently deleted.")}};
+  w.append(b,x);el.append(w)})}
+function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
+ const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>db[b].t-db[a].t);
+ $("#list").innerHTML=ks.length?"":`<small>${Object.keys(db).length?"No match.":"No saved babies yet. Fill the form and press Save baby."}</small>`;
+ ks.forEach(k=>{const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
+  const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList()};$("#list").append(b)})}
+function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first.");$('[data-k="name"]').focus();return}
+ const k=r.f.name.toLowerCase();
+ if(k!==cur&&db[k]&&!confirm("A baby with this name already exists. Replace the saved record?"))return;
+ if(cur&&k!==cur)delete db[cur];
+ r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
+function setView(on){document.body.classList.toggle("cv",on);$("#bView").textContent=on?"Back to editing":"Preview card";if(on)card()}
+function cardHTML(r){const f=r.f;
+ const g=(t,items)=>items.length?`<div class="csec"><h2>${t}</h2><div class="cg">${items.join("")}</div></div>`:"";
+ const it=(l,v,full)=>v?`<span class="${full?"full":""}"><b>${l}:</b> ${esc(v)}</span>`:"";
+ const out=[];
+ const lab=(id,l,u)=>f[id]?it(l,f[id]+(u?" "+u:"")):"";
+ const a=[it("Sex",f.sex),it("Born",f.dob),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",[f.mode,f.icsi&&"ICSI"].filter(Boolean).join(", ")),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1)].filter(Boolean);
+ out.push(g("Baby",a));
+ out.push(g("Respiratory",[it("Support",f.o2=="MV"?"MV"+(f.mvc?" (Conventional)":f.mvh?" (High frequency)":""):f.o2),it("Flow",f.flow&&f.flow+" L/min"),
+  it("FiO₂",(f.cp_fio2||f.cv_fio2||f.hf_fio2)&&(f.cp_fio2||f.cv_fio2||f.hf_fio2)+"%"),it("PIP",f.cv_pip&&f.cv_pip+" cmH₂O"),it("PEEP",(f.cp_peep||f.cv_peep)&&(f.cp_peep||f.cv_peep)+" cmH₂O"),
+  it("MAP",f.hf_map&&f.hf_map+" cmH₂O"),it("ΔP",f.hf_dp&&f.hf_dp+" cmH₂O"),it("Ti",(f.cv_ti||f.hf_ti)&&(f.cv_ti||f.hf_ti)+" s"),
+  it("Frequency",f.cv_freq?f.cv_freq+" /min":f.hf_freq?f.hf_freq+" Hz":"")].filter(Boolean)));
+ out.push(g("IV fluids",[it("Fluid",f.ivt),it("Rate",f.ivr&&f.ivr+" ml/hr"),it("GIR",f.gir&&f.gir+" mg/kg/min"),it("Notes",f.ivn)].filter(Boolean)));
+ out.push(g("Feeding",[it("Type",f.fdt),it("Volume",f.fdv&&f.fdv+" ml"),it("Every",f.fdf&&f.fdf+" h"),it("Route",f.fdr)].filter(Boolean)));
+ out.push(g("Phototherapy",[it("Type",f.pt),it("Started",f.pts),it("Notes",f.ptn)].filter(Boolean)));
+ out.push(g("Medications",r.meds.map(m=>it(m.n,[m.d,m.r,m.f].filter(Boolean).join(" · "))||`<span><b>${esc(m.n)}</b></span>`)));
+ out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("anc","ANC"),lab("ret","Retics","%")].filter(Boolean)));
+ out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" h":"")):it("Age at TSB",f.tsba&&f.tsba+" h"),lab("dbil","Direct","mg/dl"),it("Blood group",f.bg),it("Coombs",f.coombs)].filter(Boolean)));
+ out.push(g("Chemistry",[lab("crp","CRP","mg/L"),lab("glu","RBS","mg/dl"),lab("na","Na"),lab("k","K"),lab("ca","Ca"),lab("ur","Urea"),lab("cr","Creat"),lab("alt","ALT"),lab("ast","AST"),lab("alb","Alb")].filter(Boolean)));
+ out.push(g("Blood gas",[lab("ph","pH"),lab("pco2","pCO₂"),lab("hco3","HCO₃"),lab("be","BE"),lab("lac","Lactate")].filter(Boolean)));
+ out.push(g("Other labs",r.labs.map(l=>it(l.n,l.v))));
+ out.push(g("Plan / notes",[it("",f.plan,1).replace("<b>:</b> ","")].filter(x=>f.plan)));
+ if(r.imgs&&r.imgs.length)out.push(`<div class="csec"><h2>Attachments</h2><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:150px;max-width:48%;margin:2px">`).join("")}</div></div>`);
+ return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+out.join("")}
+function card(){$("#card").innerHTML=cardHTML(collect())}
+$("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList()};
+$("#bSave").onclick=save;
+$("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
+$("#bPrint").onclick=()=>{card();window.print()};
+$("#bAll").onclick=()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
+ $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
+ document.body.classList.add("pa");window.print()};
+window.addEventListener("afterprint",()=>document.body.classList.remove("pa"));
+function caseText(r){
+ const f=r.f,d=Object.fromEntries(derived(f));const M=f.sex==="Male",F=f.sex==="Female";
+ const sex=M?"male":F?"female":"",P=M?"He":F?"She":"The neonate",Q=M?"His":F?"Her":"The neonate's";
+ const j=a=>a.length>1?a.slice(0,-1).join(", ")+(a.length>2?",":"")+" and "+a[a.length-1]:a.join("");
+ const nu=u=>u=="%"||u[0]=="/"?"":" ";const pv=(l,v,u)=>v?l+" "+v+(u?nu(u)+u:""):"";
+ const an=/^(8\d*|11|18)(\.\d+)?$/.test(f.age||"");
+ let t=(f.age?(an?"An ":"A ")+f.age+"-day-old ":"A ")+(sex?sex+" ":"")+"neonate";
+ const born=[];if(f.ga)born.push("at "+f.ga+" weeks of gestation");if(f.mode)born.push("by "+(f.mode==="NVD"?"normal vaginal delivery":"cesarean section"));
+ if(born.length)t+=", born "+born.join(" ");
+ if(f.icsi)t+=born.length?" (conceived by intracytoplasmic sperm injection)":" (conceived by ICSI)";
+ if(f.bw)t+=", with a birth weight of "+f.bw+" g";
+ t+=(born.length||f.bw?",":"")+" is admitted to the neonatal intensive care unit (NICU)"+(f.dx?" for "+f.dx:"")+".";
+ const s1=[];
+ if(f.dadm)s1.push(P+" is on hospital day "+f.dadm+".");
+ if(d.PMA)s1.push("Postmenstrual age is "+d.PMA.replace("wks","weeks")+".");
+ if(f.cw)s1.push(Q+" current weight is "+f.cw+" g.");
+ const o=[];
+ const cv=[pv("FiO₂",f.cv_fio2,"%"),pv("PIP",f.cv_pip,"cmH₂O"),pv("PEEP",f.cv_peep,"cmH₂O"),pv("rate",f.cv_freq,"/min"),pv("Ti",f.cv_ti,"s")].filter(Boolean);
+ const hf=[pv("FiO₂",f.hf_fio2,"%"),pv("MAP",f.hf_map,"cmH₂O"),pv("amplitude (ΔP)",f.hf_dp,"cmH₂O"),pv("frequency",f.hf_freq,"Hz"),pv("Ti",f.hf_ti,"s")].filter(Boolean);
+ const cp=[pv("FiO₂",f.cp_fio2,"%"),pv("PEEP",f.cp_peep,"cmH₂O")].filter(Boolean);
+ let rs="";
+ if(f.o2==="Room air")rs="is breathing room air";
+ else if(f.o2==="Free Flow")rs="is receiving free-flow oxygen"+(f.flow?" at "+f.flow+" L/min":"");
+ else if(f.o2==="Nasal")rs="is receiving oxygen by nasal cannula"+(f.flow?" at "+f.flow+" L/min":"");
+ else if(f.o2==="CPAP")rs="is on continuous positive airway pressure (CPAP)"+(cp.length?" with "+j(cp):"");
+ else if(f.o2==="MV")rs=f.mvc?"is mechanically ventilated using conventional ventilation"+(cv.length?" with "+j(cv):""):f.mvh?"is mechanically ventilated using high-frequency ventilation"+(hf.length?" with "+j(hf):""):"is mechanically ventilated";
+ if(rs)o.push(P+" "+rs+".");
+ if(f.ivt||f.ivr||f.gir){o.push(P+" is receiving "+(f.ivt||"intravenous fluids")+(f.ivr?" at "+f.ivr+" mL/h"+(d["IV fluid"]?" ("+d["IV fluid"]+")":""):"")+(f.gir?", with a glucose infusion rate of "+f.gir+" mg/kg/min":"")+(f.ivn?" ("+f.ivn+")":"")+".")}
+ if(f.fdt==="NPO")o.push(P+" is nil per os (NPO).");
+ else if(f.fdt||f.fdv){const m={"FT Formula":"term formula","PT Formula":"preterm formula","Breast milk":"breast milk","Fortification":"fortified feeds"};
+  o.push(P+" is fed "+(m[f.fdt]||"enterally")+(f.fdv?", "+f.fdv+" mL":"")+(f.fdf?" every "+f.fdf+" hours":"")+(f.fdr==="Oral"?" orally":f.fdr==="Ryle"?" via a nasogastric (Ryle) tube":"")+(d.Feeds?" ("+d.Feeds+")":"")+".")}
+ if(f.pt&&f.pt!=="None")o.push(P+" is receiving "+f.pt.toLowerCase()+" phototherapy"+(f.pts?" (started "+f.pts+")":"")+".");
+ else if(f.pt==="None")o.push(P+" is not receiving phototherapy.");
+ if(r.meds.length)o.push("Current medications include "+j(r.meds.map(m=>m.n+[m.d,m.r,m.f].filter(Boolean).map(x=>" "+x).join(""))).replace(/ {2,}/g," ")+".");
+ const L=(n,v,u)=>v?n+": "+v+(u?nu(u)+u:""):"";
+ const labs=[L("Hemoglobin",f.hb,"g/dL"),L("Hematocrit",f.hct,"%"),L("Platelets",f.plt,"×10³/µL"),L("Leukocytes (TLC)",f.tlc,"×10³/µL"),L("Absolute neutrophil count",f.anc,"/µL"),L("Reticulocytes",f.ret,"%"),
+  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" hours of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate/mother)",f.bg),f.coombs?"Direct Coombs test: "+f.coombs:"",
+  L("C-reactive protein",f.crp,"mg/L"),L("Glucose",f.glu,"mg/dL"),L("Sodium",f.na,"mmol/L"),L("Potassium",f.k,"mmol/L"),L("Calcium",f.ca,"mg/dL"),L("Urea",f.ur,"mg/dL"),L("Creatinine",f.cr,"mg/dL"),L("ALT",f.alt,"U/L"),L("AST",f.ast,"U/L"),L("Albumin",f.alb,"g/dL"),
+  L("Arterial pH",f.ph),L("pCO₂",f.pco2,"mmHg"),L("HCO₃⁻",f.hco3,"mmol/L"),L("Base excess",f.be,"mmol/L"),L("Lactate",f.lac,"mmol/L"),...r.labs.map(l=>L(l.n,l.v))].filter(Boolean);
+ const out=[[t,...s1].join(" ")];
+ if(o.length)out.push(o.join(" "));
+ if(labs.length)out.push("Laboratory studies show the following:\n"+labs.join("\n"));
+ if(f.plan)out.push("Additional information: "+f.plan);
+ return out.join("\n\n")}
+async function copyTxt(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();let ok=false;try{ok=document.execCommand("copy")}catch(x){}a.remove();return ok}}
+$("#bCopy").onclick=async()=>{const r=collect();if(!Object.keys(r.f).length&&!r.meds.length&&!r.labs.length){say("Nothing to copy yet.");return}say(await copyTxt(caseText(r))?"Case scenario copied.":"Copy failed in this browser.")};
+$("#big").onclick=()=>$("#big").classList.remove("on");
+$("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
+$("#q").oninput=renderList;
+$("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
+$("#bClose").onclick=()=>$("#dlg").classList.remove("on");
+$("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,o);persist();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
+build();persist();renderList();setInterval(renderTrash,6e4);
+</script>
+</body>
+</html>
