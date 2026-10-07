@@ -36,6 +36,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 .gal{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.th{position:relative}.th img{height:90px;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}.th button{position:absolute;top:3px;right:3px;padding:0 7px;line-height:1.5}#big div{width:min(900px,100%)}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
 .sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
+.ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -46,7 +47,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
 @media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}}
-@media print{body{background:#fff}aside,.bar,#form,.dlg{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
+@media print{body{background:#fff}aside,.bar,#form,.dlg,.ft{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
 </style>
 </head>
 <body>
@@ -74,6 +75,7 @@ body.cv #card{display:block}body.cv #form{display:none}
  <div id="form"></div>
  <div id="card"></div>
  <div id="all"></div>
+ <footer class="ft">By / Dr. Ahmed Shawat</footer>
 </main>
 </div>
 <div class="dlg" id="big" role="dialog" aria-label="Image viewer"><div><img id="bigimg" alt="" style="max-width:100%;max-height:75vh;display:block;margin:auto"><p style="text-align:center;margin:8px 0 0"><small>Click anywhere to close</small></p></div></div>
@@ -94,7 +96,7 @@ const SEC=[
 ["IV fluids",[["ivt","Fluid type","t"],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
 ["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]]]],
 ["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","t"]]],
-["Examination",[["","Respiratory","h"],["ex_ae","Air entry","t"],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT (sec)","n"],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","t"],["ex_suck","Suckling reflex","t"],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
+["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
 ["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["anc","ANC (/µL)","n"],["ret","Retics (%)","n"]]],
 ["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB (hours)","n"],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT (U/L)","n"],["ast","AST (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
@@ -115,7 +117,7 @@ function build(){
    if(ty=="h"){h+=`<div class="sub">${l}</div>`;continue}
    const dc=c?` data-if="${c}"`:"";
    if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
-   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option>${x}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
+   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
   }
   h+=`</div>`;
   if(t=="Feeding")h+=`<div class="calc" id="calc"></div>`;
@@ -191,7 +193,7 @@ function cardHTML(r){const f=r.f;
  out.push(g("Phototherapy",[it("Type",f.pt),it("Started",f.pts),it("Notes",f.ptn)].filter(Boolean)));
  out.push(g("Medications",r.meds.map(m=>it(m.n,[m.d,m.r,m.f].filter(Boolean).join(" · "))||`<span><b>${esc(m.n)}</b></span>`)));
  out.push(g("Exam: Respiratory",[it("Air entry",f.ex_ae),it("RR",f.ex_rr&&f.ex_rr+" /min"),it("Notes",f.ex_rn)].filter(Boolean)));
- out.push(g("Exam: CVS",[it("HR",f.ex_hr&&f.ex_hr+" /min"),it("CRT",f.ex_crt&&f.ex_crt+" sec"),it("Notes",f.ex_cn)].filter(Boolean)));
+ out.push(g("Exam: CVS",[it("HR",f.ex_hr&&f.ex_hr+" /min"),it("CRT",f.ex_crt),it("Color",f.ex_col),it("Notes",f.ex_cn)].filter(Boolean)));
  out.push(g("Exam: CNS",[it("Activity",f.ex_act),it("Moro reflex",f.ex_moro),it("Suckling reflex",f.ex_suck),it("Notes",f.ex_nn)].filter(Boolean)));
  out.push(g("Exam: Renal",[it("UOP",f.ex_uop&&f.ex_uop+" mL/kg/hr"),it("Notes",f.ex_un)].filter(Boolean)));
  out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("anc","ANC"),lab("ret","Retics","%")].filter(Boolean)));
@@ -253,7 +255,7 @@ function caseText(r){
  const out=[[t,...s1].join(" ")];
  if(o.length)out.push(o.join(" "));
  const X=(n,a)=>{a=a.filter(Boolean);return a.length?n+": "+a.join(", "):""};
- const exl=[X("Respiratory",[f.ex_ae&&"air entry "+f.ex_ae,pv("RR",f.ex_rr,"/min"),f.ex_rn]),X("Cardiovascular",[pv("HR",f.ex_hr,"/min"),pv("CRT",f.ex_crt,"sec"),f.ex_cn]),X("CNS",[f.ex_act&&"activity "+f.ex_act,f.ex_moro&&"Moro reflex "+f.ex_moro,f.ex_suck&&"suckling reflex "+f.ex_suck,f.ex_nn]),X("Renal",[pv("urine output",f.ex_uop,"mL/kg/h"),f.ex_un])].filter(Boolean);
+ const exl=[X("Respiratory",[f.ex_ae&&"air entry "+f.ex_ae,pv("RR",f.ex_rr,"/min"),f.ex_rn]),X("Cardiovascular",[pv("HR",f.ex_hr,"/min"),f.ex_crt&&"CRT "+f.ex_crt,f.ex_col&&"color "+f.ex_col,f.ex_cn]),X("CNS",[f.ex_act&&"activity "+f.ex_act,f.ex_moro&&"Moro reflex "+f.ex_moro,f.ex_suck&&"suckling reflex "+f.ex_suck,f.ex_nn]),X("Renal",[pv("urine output",f.ex_uop,"mL/kg/h"),f.ex_un])].filter(Boolean);
  if(exl.length)out.push("Physical examination:\n"+exl.join("\n"));
  if(labs.length)out.push("Laboratory studies show the following:\n"+labs.join("\n"));
  if(f.plan)out.push("Additional information: "+f.plan);
