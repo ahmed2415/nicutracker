@@ -86,20 +86,20 @@ body.cv #card{display:block}body.cv #form{display:none}
 </div></div>
 <script>
 const SEC=[
-["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","a"]]],
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","a"]]],
 ["Respiratory support",[["o2","Oxygen","s",["Room air","Free Flow","Nasal","CPAP","MV"]],
 ["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
 ["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
 ["mvc","Conventional","c",0,"o2=MV"],["mvh","High frequency","c",0,"o2=MV"],
 ["cv_fio2","FiO₂ (%)","n",0,"o2=MV&mvc=Yes"],["cv_pip","PIP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_peep","PEEP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_freq","Frequency (/min)","n",0,"o2=MV&mvc=Yes"],["cv_ti","Ti (sec)","n",0,"o2=MV&mvc=Yes"],
 ["hf_fio2","FiO₂ (%)","n",0,"o2=MV&mvh=Yes"],["hf_map","MAP (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_dp","Delta P (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_ti","Ti (sec)","n",0,"o2=MV&mvh=Yes"],["hf_freq","Frequency (Hz)","n",0,"o2=MV&mvh=Yes"]]],
-["IV fluids",[["ivt","Fluid type","t"],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
-["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]]]],
+["IV fluids",[["ivt","Fluid type","s",["D10W","Neoment","Custom Mix"]],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
+["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","w"]]],
 ["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","t"]]],
 ["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
-["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["anc","ANC (/µL)","n"],["ret","Retics (%)","n"]]],
-["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB (hours)","n"],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
-["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT (U/L)","n"],["ast","AST (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
+["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","w"]]],
+["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
+["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["mg","Mg (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT/SGPT (U/L)","n"],["ast","AST/SGOT (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
 ["Blood gas",[["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan & notes","a"]]]];
 const $=s=>document.querySelector(s);
@@ -117,7 +117,7 @@ function build(){
    if(ty=="h"){h+=`<div class="sub">${l}</div>`;continue}
    const dc=c?` data-if="${c}"`:"";
    if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
-   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
+   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":ty=="tm"?"time":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
   }
   h+=`</div>`;
   if(t=="Feeding")h+=`<div class="calc" id="calc"></div>`;
@@ -154,7 +154,7 @@ function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEac
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
  return{f,meds,labs,imgs:imgs.slice()}}
-function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||(!r&&e.dataset.k=="o2"?"Room air":"");if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k]);if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);calc()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
@@ -182,23 +182,23 @@ function cardHTML(r){const f=r.f;
  const it=(l,v,full)=>v?`<span class="${full?"full":""}"><b>${l}:</b> ${esc(v)}</span>`:"";
  const out=[];
  const lab=(id,l,u)=>f[id]?it(l,f[id]+(u?" "+u:"")):"";
- const a=[it("Sex",f.sex),it("Born",f.dob),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",f.mode),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1),it("Notes",f.dxn,1)].filter(Boolean);
+ const a=[it("Sex",f.sex),it("Born",[f.dob&&f.dob.replace(/^(\d{4})-(\d\d)-(\d\d)$/,"$3/$2/$1"),f.tob].filter(Boolean).join(" at ")),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",f.mode),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1),it("Notes",f.dxn,1)].filter(Boolean);
  out.push(g("Baby",a));
  out.push(g("Respiratory",[it("Support",f.o2=="MV"?"MV"+(f.mvc?" (Conventional)":f.mvh?" (High frequency)":""):f.o2),it("Flow",f.flow&&f.flow+" L/min"),
   it("FiO₂",(f.cp_fio2||f.cv_fio2||f.hf_fio2)&&(f.cp_fio2||f.cv_fio2||f.hf_fio2)+"%"),it("PIP",f.cv_pip&&f.cv_pip+" cmH₂O"),it("PEEP",(f.cp_peep||f.cv_peep)&&(f.cp_peep||f.cv_peep)+" cmH₂O"),
   it("MAP",f.hf_map&&f.hf_map+" cmH₂O"),it("ΔP",f.hf_dp&&f.hf_dp+" cmH₂O"),it("Ti",(f.cv_ti||f.hf_ti)&&(f.cv_ti||f.hf_ti)+" s"),
   it("Frequency",f.cv_freq?f.cv_freq+" /min":f.hf_freq?f.hf_freq+" Hz":"")].filter(Boolean)));
  out.push(g("IV fluids",[it("Fluid",f.ivt),it("Rate",f.ivr&&f.ivr+" ml/hr"),it("GIR",f.gir&&f.gir+" mg/kg/min"),it("Notes",f.ivn)].filter(Boolean)));
- out.push(g("Feeding",[it("Type",f.fdt),it("Volume",f.fdv&&f.fdv+" ml"),it("Every",f.fdf&&f.fdf+" h"),it("Route",f.fdr)].filter(Boolean)));
+ out.push(g("Feeding",[it("Type",f.fdt),it("Volume",f.fdv&&f.fdv+" ml"),it("Every",f.fdf&&f.fdf+" h"),it("Route",f.fdr),it("Mix between",f.fdm),it("Notes",f.fdn)].filter(Boolean)));
  out.push(g("Phototherapy",[it("Type",f.pt),it("Started",f.pts),it("Notes",f.ptn)].filter(Boolean)));
  out.push(g("Medications",r.meds.map(m=>it(m.n,[m.d,m.r,m.f].filter(Boolean).join(" · "))||`<span><b>${esc(m.n)}</b></span>`)));
  out.push(g("Exam: Respiratory",[it("Air entry",f.ex_ae),it("RR",f.ex_rr&&f.ex_rr+" /min"),it("Notes",f.ex_rn)].filter(Boolean)));
  out.push(g("Exam: CVS",[it("HR",f.ex_hr&&f.ex_hr+" /min"),it("CRT",f.ex_crt),it("Color",f.ex_col),it("Notes",f.ex_cn)].filter(Boolean)));
  out.push(g("Exam: CNS",[it("Activity",f.ex_act),it("Moro reflex",f.ex_moro),it("Suckling reflex",f.ex_suck),it("Notes",f.ex_nn)].filter(Boolean)));
  out.push(g("Exam: Renal",[it("UOP",f.ex_uop&&f.ex_uop+" mL/kg/hr"),it("Notes",f.ex_un)].filter(Boolean)));
- out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("anc","ANC"),lab("ret","Retics","%")].filter(Boolean)));
- out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" h":"")):it("Age at TSB",f.tsba&&f.tsba+" h"),lab("dbil","Direct","mg/dl"),it("Blood group (baby)",f.bgb),it("Blood group (mother)",f.bgm),it("Coombs",f.coombs)].filter(Boolean)));
- out.push(g("Chemistry",[lab("crp","CRP","mg/L"),lab("glu","RBS","mg/dl"),lab("na","Na"),lab("k","K"),lab("ca","Ca"),lab("ur","Urea"),lab("cr","Creat"),lab("alt","ALT"),lab("ast","AST"),lab("alb","Alb")].filter(Boolean)));
+ out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("ret","Retics","%"),it("Notes",f.cbcn)].filter(Boolean)));
+ out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" "+(f.tsbu||"hours"):"")):it("Age at TSB",f.tsba&&f.tsba+" "+(f.tsbu||"hours")),lab("dbil","Direct","mg/dl"),it("Blood group (baby)",f.bgb),it("Blood group (mother)",f.bgm),it("Coombs",f.coombs)].filter(Boolean)));
+ out.push(g("Chemistry",[lab("crp","CRP","mg/L"),lab("glu","RBS","mg/dl"),lab("na","Na"),lab("k","K"),lab("ca","Ca"),lab("mg","Mg"),lab("ur","Urea"),lab("cr","Creat"),lab("alt","ALT/SGPT"),lab("ast","AST/SGOT"),lab("alb","Alb")].filter(Boolean)));
  out.push(g("Blood gas",[lab("ph","pH"),lab("pco2","pCO₂"),lab("hco3","HCO₃"),lab("be","BE"),lab("lac","Lactate")].filter(Boolean)));
  out.push(g("Other labs",r.labs.map(l=>it(l.n,l.v))));
  out.push(g("Plan / notes",[it("",f.plan,1).replace("<b>:</b> ","")].filter(x=>f.plan)));
@@ -243,14 +243,15 @@ function caseText(r){
  if(f.ivt||f.ivr||f.gir){o.push(P+" is receiving "+(f.ivt||"intravenous fluids")+(f.ivr?" at "+f.ivr+" mL/h"+(d["IV fluid"]?" ("+d["IV fluid"]+")":""):"")+(f.gir?", with a glucose infusion rate of "+f.gir+" mg/kg/min":"")+(f.ivn?" ("+f.ivn+")":"")+".")}
  if(f.fdt==="NPO")o.push(P+" is nil per os (NPO).");
  else if(f.fdt||f.fdv){const m={"FT Formula":"term formula","PT Formula":"preterm formula","Breast milk":"breast milk","Fortification":"fortified feeds"};
-  o.push(P+" is fed "+(m[f.fdt]||"enterally")+(f.fdv?", "+f.fdv+" mL":"")+(f.fdf?" every "+f.fdf+" hours":"")+(f.fdr==="Oral"?" orally":f.fdr==="Ryle"?" via a nasogastric (Ryle) tube":"")+(d.Feeds?" ("+d.Feeds+")":"")+".")}
+  o.push(P+" is fed "+(m[f.fdt]||"enterally")+(f.fdt==="Fortification"&&f.fdm?" (mix between "+f.fdm+")":"")+(f.fdv?", "+f.fdv+" mL":"")+(f.fdf?" every "+f.fdf+" hours":"")+(f.fdr==="Oral"?" orally":f.fdr==="Ryle"?" via a nasogastric (Ryle) tube":"")+(d.Feeds?" ("+d.Feeds+")":"")+".")}
+ if(f.fdn)o.push(/[.!?]$/.test(f.fdn)?f.fdn:f.fdn+".");
  if(f.pt&&f.pt!=="None")o.push(P+" is receiving "+f.pt.toLowerCase()+" phototherapy"+(f.pts?" (started "+f.pts+")":"")+".");
  else if(f.pt==="None")o.push(P+" is not receiving phototherapy.");
  if(r.meds.length)o.push("Current medications include "+j(r.meds.map(m=>m.n+[m.d,m.r,m.f].filter(Boolean).map(x=>" "+x).join(""))).replace(/ {2,}/g," ")+".");
  const L=(n,v,u)=>v?n+": "+v+(u?nu(u)+u:""):"";
- const labs=[L("Hemoglobin",f.hb,"g/dL"),L("Hematocrit",f.hct,"%"),L("Platelets",f.plt,"×10³/µL"),L("Leukocytes (TLC)",f.tlc,"×10³/µL"),L("Absolute neutrophil count",f.anc,"/µL"),L("Reticulocytes",f.ret,"%"),
-  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" hours of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate)",f.bgb),L("Blood group (mother)",f.bgm),f.coombs?"Direct Coombs test: "+f.coombs:"",
-  L("C-reactive protein",f.crp,"mg/L"),L("Glucose",f.glu,"mg/dL"),L("Sodium",f.na,"mmol/L"),L("Potassium",f.k,"mmol/L"),L("Calcium",f.ca,"mg/dL"),L("Urea",f.ur,"mg/dL"),L("Creatinine",f.cr,"mg/dL"),L("ALT",f.alt,"U/L"),L("AST",f.ast,"U/L"),L("Albumin",f.alb,"g/dL"),
+ const labs=[L("Hemoglobin",f.hb,"g/dL"),L("Hematocrit",f.hct,"%"),L("Platelets",f.plt,"×10³/µL"),L("Leukocytes (TLC)",f.tlc,"×10³/µL"),L("Reticulocytes",f.ret,"%"),f.cbcn?"CBC notes: "+f.cbcn:"",
+  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" "+(f.tsbu||"hours")+" of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate)",f.bgb),L("Blood group (mother)",f.bgm),f.coombs?"Direct Coombs test: "+f.coombs:"",
+  L("C-reactive protein",f.crp,"mg/L"),L("Glucose",f.glu,"mg/dL"),L("Sodium",f.na,"mmol/L"),L("Potassium",f.k,"mmol/L"),L("Calcium",f.ca,"mg/dL"),L("Magnesium",f.mg,"mg/dL"),L("Urea",f.ur,"mg/dL"),L("Creatinine",f.cr,"mg/dL"),L("ALT/SGPT",f.alt,"U/L"),L("AST/SGOT",f.ast,"U/L"),L("Albumin",f.alb,"g/dL"),
   L("Arterial pH",f.ph),L("pCO₂",f.pco2,"mmHg"),L("HCO₃⁻",f.hco3,"mmol/L"),L("Base excess",f.be,"mmol/L"),L("Lactate",f.lac,"mmol/L"),...r.labs.map(l=>L(l.n,l.v))].filter(Boolean);
  const out=[[t,...s1].join(" ")];
  if(o.length)out.push(o.join(" "));
