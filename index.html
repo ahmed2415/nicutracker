@@ -155,7 +155,7 @@ function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEac
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
  return{f,meds,labs,imgs:imgs.slice()}}
-function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k]);if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||"";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);calc()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
@@ -179,6 +179,7 @@ function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first
  r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
 function setView(on){document.body.classList.toggle("cv",on);$("#bView").textContent=on?"Back to editing":"Preview card";if(on)card()}
 function items(v){return(v||"").split("\n").map(x=>x.replace(/^\s*•?\s*/,"").trim()).filter(Boolean)}
+const ft=v=>{const m=/^(\d\d):(\d\d)/.exec(v||"");if(!m)return v||"";let h=+m[1];const ap=h>=12?"PM":"AM";h=h%12||12;return String(h).padStart(2,"0")+":"+m[2]+" "+ap};
 const fd=v=>(v||"").replace(/^(\d{4})-(\d\d)-(\d\d)$/,"$3/$2/$1");
 function blocks(r){
  const f=r.f,B=[],L=(a,x)=>B.push({k:"l",a,x}),H=a=>B.push({k:"h",a}),I=x=>B.push({k:"b",x});
@@ -186,7 +187,7 @@ function blocks(r){
  const kg=g=>{const n=parseFloat(g);return n>0?(+(n/1000).toFixed(3))+"kg":""};
  const l1=J([f.sex,f.ga&&f.ga+"Wk",kg(f.cw||f.bw),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
  if(l1)L("",l1);
- const born=J([fd(f.dob),f.tob&&"at "+f.tob]).replace(", at "," at ");
+ const born=J([fd(f.dob),f.tob&&"at "+ft(f.tob)]).replace(", at "," at ");
  const dl=f.age&&f.dadm?"D"+f.age+"/D"+f.dadm:f.age?"D"+f.age:f.dadm?"Admission D"+f.dadm:"";
  if(dl||born)L("",(dl+(born?(dl?" ":"")+"(Born "+born+")":"")).trim());
  const ni=items(f.dxn);if(ni.length){H("Notes:");ni.forEach(I)}
@@ -220,7 +221,7 @@ function blocks(r){
  const tb=J([f.tsb&&"TSB "+f.tsb+(f.tsba?" @ "+f.tsba+" "+(f.tsbu||"hours").replace(/s$/,f.tsba==="1"?"":"s"):""),pv("Direct",f.dbil)]);if(tb)LB.push(tb);
  const bg=J([f.bgb&&"baby "+f.bgb,f.bgm&&"mother "+f.bgm]),bgc=J([bg&&"Blood group: "+bg,pv("Coombs",f.coombs)]);if(bgc)LB.push(bgc);
  if(f.crp)LB.push("CRP: "+f.crp);if(f.glu)LB.push("RBS: "+f.glu);
- [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT/SGPT",f.alt),pv("AST/SGOT",f.ast),pv("Alb",f.alb)]),
+ [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT",f.alt),pv("AST",f.ast),pv("Alb",f.alb)]),
   J([pv("pH",f.ph),pv("pCO2",f.pco2),pv("HCO3",f.hco3),pv("BE",f.be),pv("Lactate",f.lac)])].forEach(x=>{if(x)LB.push(x)});
  r.labs.forEach(l=>LB.push(l.n+": "+l.v));
  if(LB.length){H("Labs"+(f.labd?" ("+fd(f.labd)+")":"")+":");LB.forEach(I)}
@@ -244,6 +245,7 @@ async function copyTxt(t){try{await navigator.clipboard.writeText(t);return true
 $("#bCopy").onclick=async()=>{const B=blocks(collect());if(!B.length){say("Nothing to copy yet.");return}say(await copyTxt(toText(B))?"Copied.":"Copy failed in this browser.")};
 $("#form").addEventListener("keydown",e=>{const t=e.target;if(!t.dataset||!t.dataset.bullet||e.key!=="Enter"||e.isComposing)return;e.preventDefault();t.setRangeText("\n• ",t.selectionStart,t.selectionEnd,"end");t.dispatchEvent(new Event("input",{bubbles:true}))});
 $("#form").addEventListener("focusin",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!t.value.trim())t.value="• "});
+$("#form").addEventListener("input",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&t.value&&!/^\s*•/.test(t.value)){const p=t.selectionStart;t.value="• "+t.value.replace(/^\s+/,"");t.setSelectionRange(p+2,p+2)}});
 $("#form").addEventListener("focusout",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!items(t.value).length)t.value=""});
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
