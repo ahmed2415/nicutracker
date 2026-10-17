@@ -38,6 +38,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 .sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
 .ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
 .cl{white-space:pre-line}.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
+.dlg h2{font-family:Georgia,serif;color:var(--acc)}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -59,6 +60,7 @@ body.cv #card{display:block}body.cv #form{display:none}
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
  <div id="list"></div>
  <div id="trash"></div>
+ <button id="bImp">Import shared baby</button>
  <button id="bBak">Backup / restore</button>
  <small id="warn" style="color:var(--bad)"></small>
 </aside>
@@ -66,7 +68,7 @@ body.cv #card{display:block}body.cv #form{display:none}
  <div class="bar">
   <button class="p" id="bSave">Save baby</button>
   <button id="bView">Preview card</button>
-  <button id="bPrint">Print card</button>
+  <button id="bShare">Share</button>
   <button id="bAll">Print all (PDF)</button>
   <button id="bCopy" title="Copy as case scenario" aria-label="Copy as case scenario" style="padding:8px 10px">📋</button>
   <button class="d" id="bDel">Delete</button>
@@ -79,6 +81,18 @@ body.cv #card{display:block}body.cv #form{display:none}
  <footer class="ft">By / Dr. Ahmed Shawat</footer>
 </main>
 </div>
+<div class="dlg" id="dlgS" role="dialog" aria-label="Share baby"><div>
+ <h2 style="margin:0 0 6px;font-size:18px">Share this baby</h2>
+ <p style="margin:0 0 8px;font-size:13px;color:var(--mute)">Send this message to another user. They tap “Import shared baby” and paste it, and get their own editable copy. Images are not included. It contains patient data, so use a secure channel.</p>
+ <textarea id="shc" readonly aria-label="Share code" style="height:130px"></textarea>
+ <p><button class="p" id="bShCopy">Copy</button> <button id="bShSend">Send…</button> <button id="bShX">Close</button></p>
+</div></div>
+<div class="dlg" id="dlgI" role="dialog" aria-label="Import shared baby"><div>
+ <h2 style="margin:0 0 6px;font-size:18px">Import shared baby</h2>
+ <p style="margin:0 0 8px;font-size:13px;color:var(--mute)">Paste the message you received (the whole message is fine).</p>
+ <textarea id="imc" aria-label="Pasted share code" style="height:130px"></textarea>
+ <p><button class="p" id="bImpGo">Import</button> <button id="bImpX">Close</button></p>
+</div></div>
 <div class="dlg" id="big" role="dialog" aria-label="Image viewer"><div><img id="bigimg" alt="" style="max-width:100%;max-height:75vh;display:block;margin:auto"><p style="text-align:center;margin:8px 0 0"><small>Click anywhere to close</small></p></div></div>
 <div class="dlg" id="dlg"><div>
  <p>Copy this text to keep a backup. To restore, paste a backup here and press Restore.</p>
@@ -237,7 +251,6 @@ function card(){$("#card").innerHTML=cardHTML(collect())}
 $("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList()};
 $("#bSave").onclick=save;
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
-$("#bPrint").onclick=()=>{card();window.print()};
 $("#bAll").onclick=()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
  document.body.classList.add("pa");window.print()};
@@ -248,6 +261,32 @@ $("#form").addEventListener("keydown",e=>{const t=e.target;if(!t.dataset||!t.dat
 $("#form").addEventListener("focusin",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!t.value.trim())t.value="• "});
 $("#form").addEventListener("input",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&t.value&&!/^\s*•/.test(t.value)){const p=t.selectionStart;t.value="• "+t.value.replace(/^\s+/,"");t.setSelectionRange(p+2,p+2)}});
 $("#form").addEventListener("focusout",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!items(t.value).length)t.value=""});
+async function pack(o){const u8=new TextEncoder().encode(JSON.stringify(o));let b=null,pre="NICU0:";
+ if(window.CompressionStream){try{b=new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer());pre="NICU1:"}catch(e){b=null}}
+ if(!b)b=u8;let bin="";b.forEach(c=>bin+=String.fromCharCode(c));return pre+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+async function unpack(t){const m=/NICU([01]):([A-Za-z0-9_-]+)/.exec(t||"");if(!m)throw 0;let b=m[2].replace(/-/g,"+").replace(/_/g,"/");b+="=".repeat((4-b.length%4)%4);
+ let u8=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
+ if(m[1]==="1")u8=new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer());
+ return JSON.parse(new TextDecoder().decode(u8))}
+function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...document.querySelectorAll("[data-k]")].map(e=>e.dataset.k),f={};
+ ids.forEach(k=>{if(o.f[k]!=null&&String(o.f[k]).trim()!=="")f[k]=String(o.f[k]).slice(0,2000)});
+ const S=x=>String(x==null?"":x).slice(0,500);
+ const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
+ const labs=(Array.isArray(o.labs)?o.labs:[]).slice(0,50).map(l=>({d:S(l.d),n:S(l.n),v:S(l.v)})).filter(l=>l.n&&l.v);
+ scrub(f);if(!f.name)throw 0;return{f,meds,labs,imgs:[]}}
+$("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
+ let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs})}catch(e){say("Could not create the share code.");return}
+ $("#shc").value="NICU Baby shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
+ $("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
+$("#bShCopy").onclick=async()=>say(await copyTxt($("#shc").value)?"Copied. Paste it in a message.":"Select the text and copy it manually.");
+$("#bShSend").onclick=()=>{try{navigator.share({text:$("#shc").value}).catch(()=>{})}catch(e){}};
+$("#bShX").onclick=()=>$("#dlgS").classList.remove("on");
+$("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
+$("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
+$("#bImpGo").onclick=async()=>{let rec;try{rec=cleanRec(await unpack($("#imc").value))}catch(e){alert("That is not a valid NICU Baby share message.");return}
+ let name=rec.f.name,k=name.toLowerCase();
+ if(db[k]){if(!confirm('A baby named "'+name+'" already exists.\nOK = replace it.\nCancel = keep both (the new one is saved as a copy).')){let nm=name+" (copy)",i=2;while(db[nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=nm.toLowerCase()}}
+ rec.t=Date.now();db[k]=rec;cur=k;persist();fill(rec);setView(false);renderList();$("#dlgI").classList.remove("on");say("Baby imported.")};
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
