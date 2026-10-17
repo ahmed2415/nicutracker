@@ -29,7 +29,7 @@ legend{font-size:17px;padding:0 6px;color:var(--acc)}
 label{display:flex;flex-direction:column;font-size:12.5px;color:var(--mute);gap:3px}
 input,select,textarea{padding:7px 8px;border:1px solid var(--line);border-radius:5px;background:var(--bg);width:100%;font-size:15px}
 .w2{grid-column:1/-1}.row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;margin-bottom:6px}
-.row.l{grid-template-columns:2fr 1fr auto}
+.row.l{grid-template-columns:1fr 2fr 1fr auto}
 .calc{color:var(--acc);font-size:13px;margin-top:8px}
 #card{display:none;background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px}
 body.cv #card{display:block}body.cv #form{display:none}
@@ -37,7 +37,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
 .sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
 .ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
-.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
+.cl{white-space:pre-line}.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -47,7 +47,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 .dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
-@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}}
 @media print{body{background:#fff}aside,.bar,#form,.dlg,.ft{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
 </style>
 </head>
@@ -87,7 +87,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 </div></div>
 <script>
 const SEC=[
-["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","b"]]],
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","a"]]],
 ["Respiratory support",[["o2","Oxygen","s",["Room air","Free Flow","Nasal","CPAP","MV"]],
 ["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
 ["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
@@ -95,10 +95,10 @@ const SEC=[
 ["cv_fio2","FiO₂ (%)","n",0,"o2=MV&mvc=Yes"],["cv_pip","PIP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_peep","PEEP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_freq","Frequency (/min)","n",0,"o2=MV&mvc=Yes"],["cv_ti","Ti (sec)","n",0,"o2=MV&mvc=Yes"],
 ["hf_fio2","FiO₂ (%)","n",0,"o2=MV&mvh=Yes"],["hf_map","MAP (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_dp","Delta P (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_ti","Ti (sec)","n",0,"o2=MV&mvh=Yes"],["hf_freq","Frequency (Hz)","n",0,"o2=MV&mvh=Yes"]]],
 ["IV fluids",[["ivt","Fluid type","s",["D10W","Neoment","Custom Mix"]],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
-["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","b"]]],
-["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","b"]]],
-["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","b"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","b"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","b"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","b"]]],
-["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","b"]]],
+["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","w"]]],
+["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","w"]]],
+["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
+["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","w"]]],
 ["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["mg","Mg (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT/SGPT (U/L)","n"],["ast","AST/SGOT (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
 ["Blood gas",[["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
@@ -106,6 +106,8 @@ const SEC=[
 const $=s=>document.querySelector(s);
 let imgs=[],db={},tr={},cur=null,mem=false;const DAY=864e5;
 try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}")}catch(e){mem=true}
+function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
+try{Object.values(db).forEach(r=>scrub(r.f));Object.values(tr).forEach(t=>scrub(t.rec.f))}catch(e){}
 const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
 const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -139,7 +141,7 @@ function medRow(v={}){const d=document.createElement("div");d.className="row";
  d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
  d.lastChild.onclick=()=>d.remove();$("#meds").append(d)}
 function labRow(v={}){const d=document.createElement("div");d.className="row l";
- d.innerHTML=`<input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
+ d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="Date"><input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
  d.lastChild.onclick=()=>d.remove();$("#labs").append(d)}
 const num=k=>parseFloat(($(`[data-k="${k}"]`)||{}).value);
 function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=parseFloat(f.cw)||parseFloat(f.bw);
@@ -153,9 +155,9 @@ const gv=id=>{const e=$(`[data-k="${id}"]`);return e?(e.type=="checkbox"?(e.chec
 function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.dataset.if.split("&").every(c=>{const[a,b]=c.split("=");return b.split("|").includes(gv(a))})})}
 function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
- const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
+ const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,n:i[1].value.trim(),v:i[2].value.trim()}}).filter(m=>m.n&&m.v);
  return{f,meds,labs,imgs:imgs.slice()}}
-function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{const v=(r&&r.f[e.dataset.k])||"";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);calc()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
@@ -190,7 +192,7 @@ function blocks(r){
  const born=J([fd(f.dob),f.tob&&"at "+ft(f.tob)]).replace(", at "," at ");
  const dl=f.age&&f.dadm?"D"+f.age+"/D"+f.dadm:f.age?"D"+f.age:f.dadm?"Admission D"+f.dadm:"";
  if(dl||born)L("",(dl+(born?(dl?" ":"")+"(Born "+born+")":"")).trim());
- const ni=items(f.dxn);if(ni.length){H("Notes:");ni.forEach(I)}
+ const ni=items(f.dxn);if(ni.length)L("Notes:",ni.join("\n"));
  // feeding
  const vol=f.fdv?f.fdv+" cc":"",fq=f.fdf?(f.fdv?"/"+f.fdf+"h":"q"+f.fdf+"h"):"",fn=flat(f.fdn);
  if(f.fdt==="NPO")L("","NPO"+(fn?" — "+fn:""));
@@ -206,9 +208,8 @@ function blocks(r){
   "MV":"MV"+(f.mvc?" Conventional"+par(cv):f.mvh?" HFO"+par(hf):"")}[f.o2];
  if(ox)L("Oxygen:",ox);
  // fluids
- const w=parseFloat(f.cw)||parseFloat(f.bw),rt=parseFloat(f.ivr);
- if(f.ivt||f.ivr||f.gir){const tfi=rt>0&&w>0?Math.round(rt*24/(w/1000)):0,xs=J([f.ivt,pv("GIR",f.gir),flat(f.ivn)]);
-  L("",tfi?"Fluids on "+tfi+"ml/kg/d"+par(xs):"Fluids: "+J([f.ivt,f.ivr&&f.ivr+" ml/h",pv("GIR",f.gir),flat(f.ivn)]))}
+ if(f.ivt||f.ivr||f.gir||f.ivn){const ex=J([pv("GIR",f.gir),flat(f.ivn)]);
+  L("","Fluids"+(f.ivt?" on "+f.ivt:"")+(f.ivr?" on a rate "+f.ivr+"ml/hr":"")+(ex?" ("+ex+")":""))}
  if(f.pt&&f.pt!=="None")L("Phototherapy:",f.pt+par(J([f.pts&&"since "+fd(f.pts),flat(f.ptn)])));
  if(r.meds.length)L("Drugs:",r.meds.map(m=>[m.n,m.d,m.r,m.f].filter(Boolean).join(" ")).join(", "));
  // exam
@@ -223,7 +224,7 @@ function blocks(r){
  if(f.crp)LB.push("CRP: "+f.crp);if(f.glu)LB.push("RBS: "+f.glu);
  [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT",f.alt),pv("AST",f.ast),pv("Alb",f.alb)]),
   J([pv("pH",f.ph),pv("pCO2",f.pco2),pv("HCO3",f.hco3),pv("BE",f.be),pv("Lactate",f.lac)])].forEach(x=>{if(x)LB.push(x)});
- r.labs.forEach(l=>LB.push(l.n+": "+l.v));
+ r.labs.forEach(l=>LB.push(l.n+": "+l.v+(l.d?" ("+fd(l.d)+")":"")));
  if(LB.length){H("Labs"+(f.labd?" ("+fd(f.labd)+")":"")+":");LB.forEach(I)}
  const pi=items(f.plan);if(pi.length){H("Plan:");pi.forEach(I)}
  return B}
