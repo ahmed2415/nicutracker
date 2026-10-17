@@ -37,6 +37,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
 .sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
 .ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
+.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -86,7 +87,7 @@ body.cv #card{display:block}body.cv #form{display:none}
 </div></div>
 <script>
 const SEC=[
-["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","a"]]],
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes","b"]]],
 ["Respiratory support",[["o2","Oxygen","s",["Room air","Free Flow","Nasal","CPAP","MV"]],
 ["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
 ["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
@@ -94,14 +95,14 @@ const SEC=[
 ["cv_fio2","FiO₂ (%)","n",0,"o2=MV&mvc=Yes"],["cv_pip","PIP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_peep","PEEP (cmH₂O)","n",0,"o2=MV&mvc=Yes"],["cv_freq","Frequency (/min)","n",0,"o2=MV&mvc=Yes"],["cv_ti","Ti (sec)","n",0,"o2=MV&mvc=Yes"],
 ["hf_fio2","FiO₂ (%)","n",0,"o2=MV&mvh=Yes"],["hf_map","MAP (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_dp","Delta P (cmH₂O)","n",0,"o2=MV&mvh=Yes"],["hf_ti","Ti (sec)","n",0,"o2=MV&mvh=Yes"],["hf_freq","Frequency (Hz)","n",0,"o2=MV&mvh=Yes"]]],
 ["IV fluids",[["ivt","Fluid type","s",["D10W","Neoment","Custom Mix"]],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
-["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","w"]]],
-["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","t"]]],
-["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
-["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","w"]]],
+["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","b"]]],
+["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","b"]]],
+["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","b"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","b"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","b"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","b"]]],
+["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","b"]]],
 ["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry & inflammation",[["crp","CRP (mg/L)","n"],["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["mg","Mg (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT/SGPT (U/L)","n"],["ast","AST/SGOT (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
 ["Blood gas",[["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
-["Plan / notes",[["plan","Plan & notes","a"]]]];
+["Plan / notes",[["plan","Plan","b"]]]];
 const $=s=>document.querySelector(s);
 let imgs=[],db={},tr={},cur=null,mem=false;const DAY=864e5;
 try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}")}catch(e){mem=true}
@@ -113,11 +114,11 @@ function build(){
  for(const[t,fs]of SEC){
   h+=`<fieldset><legend>${t}</legend><div class="g">`;
   for(const[id,l,ty,o,c]of fs){
-   const w=ty=="a"||ty=="w"?" w2":"";
+   const w=ty=="a"||ty=="w"||ty=="b"?" w2":"";
    if(ty=="h"){h+=`<div class="sub">${l}</div>`;continue}
    const dc=c?` data-if="${c}"`:"";
    if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
-   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"?`<textarea rows="2" data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":ty=="tm"?"time":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
+   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"||ty=="b"?`<textarea rows="2" ${ty=="b"?"data-bullet=1 ":""}data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":ty=="tm"?"time":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
   }
   h+=`</div>`;
   if(t=="Feeding")h+=`<div class="calc" id="calc"></div>`;
@@ -150,7 +151,7 @@ function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=
 function calc(){$("#calc").textContent=derived(collect().f).map(x=>x[0]+": "+x[1]).join("   |   ")}
 const gv=id=>{const e=$(`[data-k="${id}"]`);return e?(e.type=="checkbox"?(e.checked?"Yes":""):e.value):""};
 function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.dataset.if.split("&").every(c=>{const[a,b]=c.split("=");return b.split("|").includes(gv(a))})})}
-function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;const v=gv(e.dataset.k).trim();if(v!=="")f[e.dataset.k]=v});
+function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),v:i[1].value.trim()}}).filter(m=>m.n&&m.v);
  return{f,meds,labs,imgs:imgs.slice()}}
@@ -177,33 +178,59 @@ function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first
  if(cur&&k!==cur)delete db[cur];
  r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
 function setView(on){document.body.classList.toggle("cv",on);$("#bView").textContent=on?"Back to editing":"Preview card";if(on)card()}
+function items(v){return(v||"").split("\n").map(x=>x.replace(/^\s*•?\s*/,"").trim()).filter(Boolean)}
+const fd=v=>(v||"").replace(/^(\d{4})-(\d\d)-(\d\d)$/,"$3/$2/$1");
+function blocks(r){
+ const f=r.f,B=[],L=(a,x)=>B.push({k:"l",a,x}),H=a=>B.push({k:"h",a}),I=x=>B.push({k:"b",x});
+ const flat=v=>items(v).join("; "),J=a=>a.filter(Boolean).join(", "),pv=(l,v,u)=>v?l+" "+v+(u||""):"";
+ const kg=g=>{const n=parseFloat(g);return n>0?(+(n/1000).toFixed(3))+"kg":""};
+ const l1=J([f.sex,f.ga&&f.ga+"Wk",kg(f.cw||f.bw),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
+ if(l1)L("",l1);
+ const born=J([fd(f.dob),f.tob&&"at "+f.tob]).replace(", at "," at ");
+ const dl=f.age&&f.dadm?"D"+f.age+"/D"+f.dadm:f.age?"D"+f.age:f.dadm?"Admission D"+f.dadm:"";
+ if(dl||born)L("",(dl+(born?(dl?" ":"")+"(Born "+born+")":"")).trim());
+ const ni=items(f.dxn);if(ni.length){H("Notes:");ni.forEach(I)}
+ // feeding
+ const vol=f.fdv?f.fdv+" cc":"",fq=f.fdf?(f.fdv?"/"+f.fdf+"h":"q"+f.fdf+"h"):"",fn=flat(f.fdn);
+ if(f.fdt==="NPO")L("","NPO"+(fn?" — "+fn:""));
+ else if(f.fdt||vol||fq||f.fdr){const ty=f.fdt?" ("+f.fdt+(f.fdt==="Fortification"&&f.fdm?": mix between "+f.fdm:"")+")":"";
+  L("",[vol+fq,f.fdr,"feeding"].filter(Boolean).join(" ")+ty+(fn?" — "+fn:""))}
+ else if(fn)L("Feeding:",fn);
+ // oxygen
+ const cp=J([pv("FiO2",f.cp_fio2,"%"),pv("PEEP",f.cp_peep)]);
+ const cv=J([pv("FiO2",f.cv_fio2,"%"),pv("PIP",f.cv_pip),pv("PEEP",f.cv_peep),pv("Freq",f.cv_freq),pv("Ti",f.cv_ti)]);
+ const hf=J([pv("FiO2",f.hf_fio2,"%"),pv("MAP",f.hf_map),pv("ΔP",f.hf_dp),pv("Ti",f.hf_ti),pv("Freq",f.hf_freq," Hz")]);
+ const par=x=>x?" ("+x+")":"";
+ const ox={"Room air":"Room air","Free Flow":"Free Flow"+(f.flow?" ("+f.flow+" L/min)":""),"Nasal":"Nasal"+(f.flow?" ("+f.flow+" L/min)":""),"CPAP":"CPAP"+par(cp),
+  "MV":"MV"+(f.mvc?" Conventional"+par(cv):f.mvh?" HFO"+par(hf):"")}[f.o2];
+ if(ox)L("Oxygen:",ox);
+ // fluids
+ const w=parseFloat(f.cw)||parseFloat(f.bw),rt=parseFloat(f.ivr);
+ if(f.ivt||f.ivr||f.gir){const tfi=rt>0&&w>0?Math.round(rt*24/(w/1000)):0,xs=J([f.ivt,pv("GIR",f.gir),flat(f.ivn)]);
+  L("",tfi?"Fluids on "+tfi+"ml/kg/d"+par(xs):"Fluids: "+J([f.ivt,f.ivr&&f.ivr+" ml/h",pv("GIR",f.gir),flat(f.ivn)]))}
+ if(f.pt&&f.pt!=="None")L("Phototherapy:",f.pt+par(J([f.pts&&"since "+fd(f.pts),flat(f.ptn)])));
+ if(r.meds.length)L("Drugs:",r.meds.map(m=>[m.n,m.d,m.r,m.f].filter(Boolean).join(" ")).join(", "));
+ // exam
+ const ex=[["Resp",[pv("Air entry",f.ex_ae),pv("RR",f.ex_rr),flat(f.ex_rn)]],["CVS",[pv("HR",f.ex_hr),pv("CRT",f.ex_crt),f.ex_col,flat(f.ex_cn)]],
+  ["CNS",[pv("Activity",f.ex_act),pv("Moro",f.ex_moro),pv("Suckling",f.ex_suck),flat(f.ex_nn)]],["Renal",[pv("UOP",f.ex_uop),flat(f.ex_un)]]].map(([n,a])=>J(a)?n+": "+J(a):"").filter(Boolean);
+ if(ex.length){H("Exam:");ex.forEach(I)}
+ // labs
+ const LB=[],cb=J([pv("Hb",f.hb),pv("Hct",f.hct),pv("PLT",f.plt),pv("TLC",f.tlc),pv("Retics",f.ret)]),cn=flat(f.cbcn);
+ if(cb||cn)LB.push("CBC"+par(cb)+(cn?" — "+cn:""));
+ const tb=J([f.tsb&&"TSB "+f.tsb+(f.tsba?" @ "+f.tsba+" "+(f.tsbu||"hours").replace(/s$/,f.tsba==="1"?"":"s"):""),pv("Direct",f.dbil)]);if(tb)LB.push(tb);
+ const bg=J([f.bgb&&"baby "+f.bgb,f.bgm&&"mother "+f.bgm]),bgc=J([bg&&"Blood group: "+bg,pv("Coombs",f.coombs)]);if(bgc)LB.push(bgc);
+ if(f.crp)LB.push("CRP: "+f.crp);if(f.glu)LB.push("RBS: "+f.glu);
+ [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT/SGPT",f.alt),pv("AST/SGOT",f.ast),pv("Alb",f.alb)]),
+  J([pv("pH",f.ph),pv("pCO2",f.pco2),pv("HCO3",f.hco3),pv("BE",f.be),pv("Lactate",f.lac)])].forEach(x=>{if(x)LB.push(x)});
+ r.labs.forEach(l=>LB.push(l.n+": "+l.v));
+ if(LB.length){H("Labs"+(f.labd?" ("+fd(f.labd)+")":"")+":");LB.forEach(I)}
+ const pi=items(f.plan);if(pi.length){H("Plan:");pi.forEach(I)}
+ return B}
+const toText=B=>B.map(b=>b.k==="b"?"• "+b.x:b.k==="h"?b.a:(b.a?b.a+" ":"")+b.x).join("\n");
 function cardHTML(r){const f=r.f;
- const g=(t,items)=>items.length?`<div class="csec"><h2>${t}</h2><div class="cg">${items.join("")}</div></div>`:"";
- const it=(l,v,full)=>v?`<span class="${full?"full":""}"><b>${l}:</b> ${esc(v)}</span>`:"";
- const out=[];
- const lab=(id,l,u)=>f[id]?it(l,f[id]+(u?" "+u:"")):"";
- const a=[it("Sex",f.sex),it("Born",[f.dob&&f.dob.replace(/^(\d{4})-(\d\d)-(\d\d)$/,"$3/$2/$1"),f.tob].filter(Boolean).join(" at ")),it("Birth wt",f.bw&&f.bw+" g"),it("Current wt",f.cw&&f.cw+" g"),it("GA",f.ga&&f.ga+" wks"),it("Age",f.age&&f.age+" d"),it("Admission",f.dadm&&"day "+f.dadm),it("Delivery",f.mode),...derived(f).map(x=>it(x[0],x[1])),it("Diagnosis",f.dx,1),it("Notes",f.dxn,1)].filter(Boolean);
- out.push(g("Baby",a));
- out.push(g("Respiratory",[it("Support",f.o2=="MV"?"MV"+(f.mvc?" (Conventional)":f.mvh?" (High frequency)":""):f.o2),it("Flow",f.flow&&f.flow+" L/min"),
-  it("FiO₂",(f.cp_fio2||f.cv_fio2||f.hf_fio2)&&(f.cp_fio2||f.cv_fio2||f.hf_fio2)+"%"),it("PIP",f.cv_pip&&f.cv_pip+" cmH₂O"),it("PEEP",(f.cp_peep||f.cv_peep)&&(f.cp_peep||f.cv_peep)+" cmH₂O"),
-  it("MAP",f.hf_map&&f.hf_map+" cmH₂O"),it("ΔP",f.hf_dp&&f.hf_dp+" cmH₂O"),it("Ti",(f.cv_ti||f.hf_ti)&&(f.cv_ti||f.hf_ti)+" s"),
-  it("Frequency",f.cv_freq?f.cv_freq+" /min":f.hf_freq?f.hf_freq+" Hz":"")].filter(Boolean)));
- out.push(g("IV fluids",[it("Fluid",f.ivt),it("Rate",f.ivr&&f.ivr+" ml/hr"),it("GIR",f.gir&&f.gir+" mg/kg/min"),it("Notes",f.ivn)].filter(Boolean)));
- out.push(g("Feeding",[it("Type",f.fdt),it("Volume",f.fdv&&f.fdv+" ml"),it("Every",f.fdf&&f.fdf+" h"),it("Route",f.fdr),it("Mix between",f.fdm),it("Notes",f.fdn)].filter(Boolean)));
- out.push(g("Phototherapy",[it("Type",f.pt),it("Started",f.pts),it("Notes",f.ptn)].filter(Boolean)));
- out.push(g("Medications",r.meds.map(m=>it(m.n,[m.d,m.r,m.f].filter(Boolean).join(" · "))||`<span><b>${esc(m.n)}</b></span>`)));
- out.push(g("Exam: Respiratory",[it("Air entry",f.ex_ae),it("RR",f.ex_rr&&f.ex_rr+" /min"),it("Notes",f.ex_rn)].filter(Boolean)));
- out.push(g("Exam: CVS",[it("HR",f.ex_hr&&f.ex_hr+" /min"),it("CRT",f.ex_crt),it("Color",f.ex_col),it("Notes",f.ex_cn)].filter(Boolean)));
- out.push(g("Exam: CNS",[it("Activity",f.ex_act),it("Moro reflex",f.ex_moro),it("Suckling reflex",f.ex_suck),it("Notes",f.ex_nn)].filter(Boolean)));
- out.push(g("Exam: Renal",[it("UOP",f.ex_uop&&f.ex_uop+" mL/kg/hr"),it("Notes",f.ex_un)].filter(Boolean)));
- out.push(g("CBC"+(f.labd?" ("+f.labd+")":""),[lab("hb","Hb","g/dl"),lab("hct","Hct","%"),lab("plt","PLT","×10³"),lab("tlc","TLC","×10³"),lab("ret","Retics","%"),it("Notes",f.cbcn)].filter(Boolean)));
- out.push(g("Bilirubin",[f.tsb?it("TSB / Age",f.tsb+" mg/dl"+(f.tsba?" @ "+f.tsba+" "+(f.tsbu||"hours"):"")):it("Age at TSB",f.tsba&&f.tsba+" "+(f.tsbu||"hours")),lab("dbil","Direct","mg/dl"),it("Blood group (baby)",f.bgb),it("Blood group (mother)",f.bgm),it("Coombs",f.coombs)].filter(Boolean)));
- out.push(g("Chemistry",[lab("crp","CRP","mg/L"),lab("glu","RBS","mg/dl"),lab("na","Na"),lab("k","K"),lab("ca","Ca"),lab("mg","Mg"),lab("ur","Urea"),lab("cr","Creat"),lab("alt","ALT/SGPT"),lab("ast","AST/SGOT"),lab("alb","Alb")].filter(Boolean)));
- out.push(g("Blood gas",[lab("ph","pH"),lab("pco2","pCO₂"),lab("hco3","HCO₃"),lab("be","BE"),lab("lac","Lactate")].filter(Boolean)));
- out.push(g("Other labs",r.labs.map(l=>it(l.n,l.v))));
- out.push(g("Plan / notes",[it("",f.plan,1).replace("<b>:</b> ","")].filter(x=>f.plan)));
- if(r.imgs&&r.imgs.length)out.push(`<div class="csec"><h2>Attachments</h2><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:150px;max-width:48%;margin:2px">`).join("")}</div></div>`);
- return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+out.join("")}
+ const body=blocks(r).map((b,i)=>b.k==="b"?`<div class="cb">• ${esc(b.x)}</div>`:b.k==="h"?`<div class="ch">${esc(b.a)}</div>`:`<div class="cl${i==0?" c1":""}">${b.a?`<b>${esc(b.a)}</b> `:""}${esc(b.x)}</div>`).join("");
+ const im=r.imgs&&r.imgs.length?`<div class="csec"><div class="ch">Attachments</div><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:150px;max-width:48%;margin:2px">`).join("")}</div></div>`:"";
+ return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+body+im}
 function card(){$("#card").innerHTML=cardHTML(collect())}
 $("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList()};
 $("#bSave").onclick=save;
@@ -213,56 +240,11 @@ $("#bAll").onclick=()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No s
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
  document.body.classList.add("pa");window.print()};
 window.addEventListener("afterprint",()=>document.body.classList.remove("pa"));
-function caseText(r){
- const f=r.f,d=Object.fromEntries(derived(f));const M=f.sex==="Male",F=f.sex==="Female";
- const sex=M?"male":F?"female":"",P=M?"He":F?"She":"The neonate",Q=M?"His":F?"Her":"The neonate's";
- const j=a=>a.length>1?a.slice(0,-1).join(", ")+(a.length>2?",":"")+" and "+a[a.length-1]:a.join("");
- const nu=u=>u=="%"||u[0]=="/"?"":" ";const pv=(l,v,u)=>v?l+" "+v+(u?nu(u)+u:""):"";
- const an=/^(8\d*|11|18)(\.\d+)?$/.test(f.age||"");
- let t=(f.age?(an?"An ":"A ")+f.age+"-day-old ":"A ")+(sex?sex+" ":"")+"neonate";
- const born=[];if(f.ga)born.push("at "+f.ga+" weeks of gestation");if(f.mode)born.push("by "+(f.mode==="NVD"?"normal vaginal delivery":"cesarean section"));
- if(born.length)t+=", born "+born.join(" ");
- if(f.bw)t+=", with a birth weight of "+f.bw+" g";
- t+=(born.length||f.bw?",":"")+" is admitted to the neonatal intensive care unit (NICU)"+(f.dx?" for "+f.dx:"")+".";
- const s1=[];
-  if(f.dxn)s1.push(/[.!?]$/.test(f.dxn)?f.dxn:f.dxn+".");
- if(f.dadm)s1.push(P+" is on hospital day "+f.dadm+".");
- if(d.PMA)s1.push("Postmenstrual age is "+d.PMA.replace("wks","weeks")+".");
- if(f.cw)s1.push(Q+" current weight is "+f.cw+" g.");
- const o=[];
- const cv=[pv("FiO₂",f.cv_fio2,"%"),pv("PIP",f.cv_pip,"cmH₂O"),pv("PEEP",f.cv_peep,"cmH₂O"),pv("rate",f.cv_freq,"/min"),pv("Ti",f.cv_ti,"s")].filter(Boolean);
- const hf=[pv("FiO₂",f.hf_fio2,"%"),pv("MAP",f.hf_map,"cmH₂O"),pv("amplitude (ΔP)",f.hf_dp,"cmH₂O"),pv("frequency",f.hf_freq,"Hz"),pv("Ti",f.hf_ti,"s")].filter(Boolean);
- const cp=[pv("FiO₂",f.cp_fio2,"%"),pv("PEEP",f.cp_peep,"cmH₂O")].filter(Boolean);
- let rs="";
- if(f.o2==="Room air")rs="is breathing room air";
- else if(f.o2==="Free Flow")rs="is receiving free-flow oxygen"+(f.flow?" at "+f.flow+" L/min":"");
- else if(f.o2==="Nasal")rs="is receiving oxygen by nasal cannula"+(f.flow?" at "+f.flow+" L/min":"");
- else if(f.o2==="CPAP")rs="is on continuous positive airway pressure (CPAP)"+(cp.length?" with "+j(cp):"");
- else if(f.o2==="MV")rs=f.mvc?"is mechanically ventilated using conventional ventilation"+(cv.length?" with "+j(cv):""):f.mvh?"is mechanically ventilated using high-frequency ventilation"+(hf.length?" with "+j(hf):""):"is mechanically ventilated";
- if(rs)o.push(P+" "+rs+".");
- if(f.ivt||f.ivr||f.gir){o.push(P+" is receiving "+(f.ivt||"intravenous fluids")+(f.ivr?" at "+f.ivr+" mL/h"+(d["IV fluid"]?" ("+d["IV fluid"]+")":""):"")+(f.gir?", with a glucose infusion rate of "+f.gir+" mg/kg/min":"")+(f.ivn?" ("+f.ivn+")":"")+".")}
- if(f.fdt==="NPO")o.push(P+" is nil per os (NPO).");
- else if(f.fdt||f.fdv){const m={"FT Formula":"term formula","PT Formula":"preterm formula","Breast milk":"breast milk","Fortification":"fortified feeds"};
-  o.push(P+" is fed "+(m[f.fdt]||"enterally")+(f.fdt==="Fortification"&&f.fdm?" (mix between "+f.fdm+")":"")+(f.fdv?", "+f.fdv+" mL":"")+(f.fdf?" every "+f.fdf+" hours":"")+(f.fdr==="Oral"?" orally":f.fdr==="Ryle"?" via a nasogastric (Ryle) tube":"")+(d.Feeds?" ("+d.Feeds+")":"")+".")}
- if(f.fdn)o.push(/[.!?]$/.test(f.fdn)?f.fdn:f.fdn+".");
- if(f.pt&&f.pt!=="None")o.push(P+" is receiving "+f.pt.toLowerCase()+" phototherapy"+(f.pts?" (started "+f.pts+")":"")+".");
- else if(f.pt==="None")o.push(P+" is not receiving phototherapy.");
- if(r.meds.length)o.push("Current medications include "+j(r.meds.map(m=>m.n+[m.d,m.r,m.f].filter(Boolean).map(x=>" "+x).join(""))).replace(/ {2,}/g," ")+".");
- const L=(n,v,u)=>v?n+": "+v+(u?nu(u)+u:""):"";
- const labs=[L("Hemoglobin",f.hb,"g/dL"),L("Hematocrit",f.hct,"%"),L("Platelets",f.plt,"×10³/µL"),L("Leukocytes (TLC)",f.tlc,"×10³/µL"),L("Reticulocytes",f.ret,"%"),f.cbcn?"CBC notes: "+f.cbcn:"",
-  f.tsb?L("Total serum bilirubin",f.tsb,"mg/dL")+(f.tsba?" (at "+f.tsba+" "+(f.tsbu||"hours")+" of life)":""):"",L("Direct bilirubin",f.dbil,"mg/dL"),L("Blood group (neonate)",f.bgb),L("Blood group (mother)",f.bgm),f.coombs?"Direct Coombs test: "+f.coombs:"",
-  L("C-reactive protein",f.crp,"mg/L"),L("Glucose",f.glu,"mg/dL"),L("Sodium",f.na,"mmol/L"),L("Potassium",f.k,"mmol/L"),L("Calcium",f.ca,"mg/dL"),L("Magnesium",f.mg,"mg/dL"),L("Urea",f.ur,"mg/dL"),L("Creatinine",f.cr,"mg/dL"),L("ALT/SGPT",f.alt,"U/L"),L("AST/SGOT",f.ast,"U/L"),L("Albumin",f.alb,"g/dL"),
-  L("Arterial pH",f.ph),L("pCO₂",f.pco2,"mmHg"),L("HCO₃⁻",f.hco3,"mmol/L"),L("Base excess",f.be,"mmol/L"),L("Lactate",f.lac,"mmol/L"),...r.labs.map(l=>L(l.n,l.v))].filter(Boolean);
- const out=[[t,...s1].join(" ")];
- if(o.length)out.push(o.join(" "));
- const X=(n,a)=>{a=a.filter(Boolean);return a.length?n+": "+a.join(", "):""};
- const exl=[X("Respiratory",[f.ex_ae&&"air entry "+f.ex_ae,pv("RR",f.ex_rr,"/min"),f.ex_rn]),X("Cardiovascular",[pv("HR",f.ex_hr,"/min"),f.ex_crt&&"CRT "+f.ex_crt,f.ex_col&&"color "+f.ex_col,f.ex_cn]),X("CNS",[f.ex_act&&"activity "+f.ex_act,f.ex_moro&&"Moro reflex "+f.ex_moro,f.ex_suck&&"suckling reflex "+f.ex_suck,f.ex_nn]),X("Renal",[pv("urine output",f.ex_uop,"mL/kg/h"),f.ex_un])].filter(Boolean);
- if(exl.length)out.push("Physical examination:\n"+exl.join("\n"));
- if(labs.length)out.push("Laboratory studies show the following:\n"+labs.join("\n"));
- if(f.plan)out.push("Additional information: "+f.plan);
- return out.join("\n\n")}
 async function copyTxt(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();let ok=false;try{ok=document.execCommand("copy")}catch(x){}a.remove();return ok}}
-$("#bCopy").onclick=async()=>{const r=collect();if(!Object.keys(r.f).filter(k=>!(k=="o2"&&r.f.o2=="Room air")).length&&!r.meds.length&&!r.labs.length){say("Nothing to copy yet.");return}say(await copyTxt(caseText(r))?"Case scenario copied.":"Copy failed in this browser.")};
+$("#bCopy").onclick=async()=>{const B=blocks(collect());if(!B.length){say("Nothing to copy yet.");return}say(await copyTxt(toText(B))?"Copied.":"Copy failed in this browser.")};
+$("#form").addEventListener("keydown",e=>{const t=e.target;if(!t.dataset||!t.dataset.bullet||e.key!=="Enter"||e.isComposing)return;e.preventDefault();t.setRangeText("\n• ",t.selectionStart,t.selectionEnd,"end");t.dispatchEvent(new Event("input",{bubbles:true}))});
+$("#form").addEventListener("focusin",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!t.value.trim())t.value="• "});
+$("#form").addEventListener("focusout",e=>{const t=e.target;if(t.dataset&&t.dataset.bullet&&!items(t.value).length)t.value=""});
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
