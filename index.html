@@ -60,6 +60,7 @@ body.cv #card{display:block}body.cv #form{display:none}
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
  <div id="list"></div>
  <div id="trash"></div>
+ <button id="bAllX">Transfer all babies</button>
  <button id="bImp">Import shared baby</button>
  <button id="bBak">Backup / restore</button>
  <small id="warn" style="color:var(--bad)"></small>
@@ -70,7 +71,7 @@ body.cv #card{display:block}body.cv #form{display:none}
   <button id="bView">Preview card</button>
   <button id="bShare">Share</button>
   <button id="bAll">Print all (PDF)</button>
-  <button id="bCopy" title="Copy" aria-label="Copy" style="padding:8px 10px">📋</button>
+  <button id="bCopy" title="Copy as case scenario" aria-label="Copy as case scenario" style="padding:8px 10px">📋</button>
   <button class="d" id="bDel">Delete</button>
   <button class="d" id="bReset">Reset</button>
   <span id="msg" style="align-self:center;color:var(--acc)" role="status"></span>
@@ -82,8 +83,8 @@ body.cv #card{display:block}body.cv #form{display:none}
 </main>
 </div>
 <div class="dlg" id="dlgS" role="dialog" aria-label="Share baby"><div>
- <h2 style="margin:0 0 6px;font-size:18px">Share this baby</h2>
- <p style="margin:0 0 8px;font-size:13px;color:var(--mute)">Send this message to another user. They tap “Import shared baby” and paste it, and get their own editable copy. Images are not included. It contains patient data, so use a secure channel.</p>
+ <h2 id="shT" style="margin:0 0 6px;font-size:18px">Share this baby</h2>
+ <p style="margin:0 0 8px;font-size:13px;color:var(--mute)">Send or copy this message. On the other device (yours or another user’s), tap “Import shared baby” and paste it to get an editable copy. Images are not included. It contains patient data, so use a secure channel.</p>
  <textarea id="shc" readonly aria-label="Share code" style="height:130px"></textarea>
  <p><button class="p" id="bShCopy">Copy</button> <button id="bShSend">Send…</button> <button id="bShX">Close</button></p>
 </div></div>
@@ -179,7 +180,7 @@ function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
  ks.forEach(k=>{const h=Math.max(0,Math.ceil((DAY-(Date.now()-tr[k].del))/36e5));const w=document.createElement("div");w.style.cssText="display:flex;gap:4px";
   const b=document.createElement("button");b.className="item";b.style.flex="1";
   b.innerHTML=`Restore: ${esc(tr[k].rec.f.name)}<small>${h} h left</small>`;
-  b.onclick=()=>{if(db[k]&&!confirm("A baby with this name exists now. Replace it with the deleted record?"))return;db[k]=tr[k].rec;delete tr[k];cur=k;persist();fill(db[k]);setView(false);renderList();say("Restored.")};
+  b.onclick=()=>{if(db[k]&&!confirm("A baby with this name exists now. Replace it with the deleted record?"))return;db[k]=tr[k].rec;db[k].t=Date.now();delete tr[k];cur=k;persist();fill(db[k]);setView(false);renderList();say("Restored.")};
   const x=document.createElement("button");x.className="d";x.textContent="🗑";x.title="Delete permanently";x.setAttribute("aria-label","Delete "+tr[k].rec.f.name+" permanently");
   x.onclick=()=>{if(confirm("Permanently delete this record? This cannot be undone.")){delete tr[k];persist();renderTrash();say("Permanently deleted.")}};
   w.append(b,x);el.append(w)})}
@@ -277,16 +278,25 @@ function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...docum
 $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
  let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs})}catch(e){say("Could not create the share code.");return}
  $("#shc").value="NICU Baby shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
- $("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
+ $("#shT").textContent="Share this baby";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
+$("#bAllX").onclick=async()=>{const ks=Object.keys(db);if(!ks.length){say("No saved babies to transfer.");return}
+ let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs}))})}catch(e){say("Could not create the code.");return}
+ $("#shc").value="NICU Baby transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
+ $("#shT").textContent="Transfer all babies";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bShCopy").onclick=async()=>say(await copyTxt($("#shc").value)?"Copied. Paste it in a message.":"Select the text and copy it manually.");
 $("#bShSend").onclick=()=>{try{navigator.share({text:$("#shc").value}).catch(()=>{})}catch(e){}};
 $("#bShX").onclick=()=>$("#dlgS").classList.remove("on");
 $("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
 $("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
-$("#bImpGo").onclick=async()=>{let rec;try{rec=cleanRec(await unpack($("#imc").value))}catch(e){alert("That is not a valid NICU Baby share message.");return}
- let name=rec.f.name,k=name.toLowerCase();
- if(db[k]){if(!confirm('A baby named "'+name+'" already exists.\nOK = replace it.\nCancel = keep both (the new one is saved as a copy).')){let nm=name+" (copy)",i=2;while(db[nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=nm.toLowerCase()}}
- rec.t=Date.now();db[k]=rec;cur=k;persist();fill(rec);setView(false);renderList();$("#dlgI").classList.remove("on");say("Baby imported.")};
+$("#bImpGo").onclick=async()=>{let o,recs;
+ try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,500).map(cleanRec)}catch(e){alert("That is not a valid NICU Baby share message.");return}
+ const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
+ if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
+ recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
+  if(db[k]&&!rp){let nm=name+" (copy)",i=2;while(db[nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=nm.toLowerCase()}
+  else if(db[k])rec.imgs=db[k].imgs||[];
+  rec.t=Date.now();db[k]=rec;cur=k});
+ persist();fill(db[cur]);setView(false);renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
@@ -296,7 +306,7 @@ $("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confi
 $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
 $("#bClose").onclick=()=>$("#dlg").classList.remove("on");
-$("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,o);persist();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
+$("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,o);Object.keys(o).forEach(k=>{if(o[k]&&typeof o[k]=="object")o[k].t=Date.now()});persist();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
 build();fill(null);persist();renderList();setInterval(renderTrash,6e4);
 </script>
 </body>
