@@ -66,10 +66,8 @@ aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-
 <aside>
  <h1>NICU Baby</h1>
  <div class="thm"><button id="bMode">Dark mode</button><span class="sws" role="group" aria-label="Accent color"><button class="sw" data-a="blue" aria-label="Blue" style="background:#1d5fbf"></button><button class="sw" data-a="red" aria-label="Red" style="background:#b3261e"></button><button class="sw" data-a="green" aria-label="Green" style="background:#2e7d32"></button><button class="sw" data-a="purple" aria-label="Purple" style="background:#6d3fc0"></button></span></div>
- <div id="tabs" class="tabs"></div>
  <button class="p" id="bNew">+ New baby</button>
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
- <small id="dayh" style="color:var(--mute)"></small>
  <div id="list"></div>
  <div id="trash"></div>
  <button id="bAllX">Transfer all babies</button>
@@ -132,12 +130,12 @@ const SEC=[
 ["Blood gas",[["bgd","Date","d"],["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan","b"]]]];
 const $=s=>document.querySelector(s);
-let imgs=[],db={},tr={},cur=null,mem=false,day=iso(Date.now());const DAY=864e5;
+let imgs=[],db={},tr={},cur=null,mem=false;const DAY=864e5;
 try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}")}catch(e){mem=true}
 function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
 function iso(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function dl(d){return new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
-function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;if(!r.day)r.day=iso(r.t||Date.now());if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";n[r.day+"|"+String(r.f.name||k).toLowerCase()]=r}return n}
+function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
 db=normDb(db);{const t2={};for(const k in tr){const x=tr[k];if(!x||!x.rec)continue;const m=normDb({a:x.rec}),nk=Object.keys(m)[0];if(nk)t2[nk]=x}tr=t2}
 try{Object.values(db).forEach(r=>scrub(r.f));Object.values(tr).forEach(t=>scrub(t.rec.f))}catch(e){}
 const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
@@ -195,7 +193,7 @@ function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.da
 function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,n:i[1].value.trim(),v:i[2].value.trim()}}).filter(m=>m.n&&m.v);
- const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);return{f,meds,labs,crps,imgs:imgs.slice(),day}}
+ const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);return{f,meds,labs,crps,imgs:imgs.slice()}}
 function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);calc();openSecs()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
@@ -204,20 +202,20 @@ function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
  ks.forEach(k=>{const h=Math.max(0,Math.ceil((DAY-(Date.now()-tr[k].del))/36e5));const w=document.createElement("div");w.style.cssText="display:flex;gap:4px";
   const b=document.createElement("button");b.className="item";b.style.flex="1";
   b.innerHTML=`Restore: ${esc(tr[k].rec.f.name)}<small>${h} h left</small>`;
-  b.onclick=()=>{if(db[k]&&!confirm("A baby with this name exists now. Replace it with the deleted record?"))return;db[k]=tr[k].rec;db[k].t=Date.now();delete tr[k];cur=k;persist();fill(db[k]);day=db[k].day||day;setView(false);renderTabs();renderList();say("Restored.")};
+  b.onclick=()=>{if(db[k]&&!confirm("A baby with this name exists now. Replace it with the deleted record?"))return;db[k]=tr[k].rec;db[k].t=Date.now();delete tr[k];cur=k;persist();fill(db[k]);setView(false);renderList();say("Restored.")};
   const x=document.createElement("button");x.className="d";x.textContent="🗑";x.title="Delete permanently";x.setAttribute("aria-label","Delete "+tr[k].rec.f.name+" permanently");
   x.onclick=()=>{if(confirm("Permanently delete this record? This cannot be undone.")){delete tr[k];persist();renderTrash();say("Permanently deleted.")}};
   w.append(b,x);el.append(w)})}
-function renderList(){renderTrash();$("#dayh").textContent="Babies · "+dl(day);const q=$("#q").value.toLowerCase();
- const ks=Object.keys(db).filter(k=>db[k].day===day&&db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>db[b].t-db[a].t);
- $("#list").innerHTML=ks.length?"":`<small>${Object.values(db).some(r=>r.day===day)?"No match.":"No babies on this day yet. Fill the form and press Save baby."}</small>`;
+function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
+ const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>db[b].t-db[a].t);
+ $("#list").innerHTML=ks.length?"":`<small>${Object.keys(db).length?"No match.":"No saved babies yet. Fill the form and press Save baby."}</small>`;
  ks.forEach(k=>{const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
   const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList()};$("#list").append(b)})}
 function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first.");$('[data-k="name"]').focus();return}
- const k=day+"|"+r.f.name.toLowerCase();
+ const k=r.f.name.toLowerCase();
  if(k!==cur&&db[k]&&!confirm("A baby with this name already exists. Replace the saved record?"))return;
  if(cur&&k!==cur)delete db[cur];
- r.t=Date.now();r.day=day;db[k]=r;cur=k;const ok=persist();renderTabs();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
+ r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
 function setView(on){document.body.classList.toggle("cv",on);$("#bView").textContent=on?"Back to editing":"Preview card";if(on)card()}
 function items(v){return(v||"").split("\n").map(x=>x.replace(/^\s*•?\s*/,"").trim()).filter(Boolean)}
 const ft=v=>{const m=/^(\d\d):(\d\d)/.exec(v||"");if(!m)return v||"";let h=+m[1];const ap=h>=12?"PM":"AM";h=h%12||12;return String(h).padStart(2,"0")+":"+m[2]+" "+ap};
@@ -272,12 +270,12 @@ const toText=B=>B.map(b=>b.k==="b"?"• "+b.x:b.k==="h"?b.a:(b.a?b.a+" ":"")+b.x
 function cardHTML(r){const f=r.f;
  const body=blocks(r).map((b,i)=>b.k==="b"?`<div class="cb">• ${esc(b.x)}</div>`:b.k==="h"?`<div class="ch">${esc(b.a)}</div>`:`<div class="cl${i==0?" c1":""}">${b.a?`<b>${esc(b.a)}</b> `:""}${esc(b.x)}</div>`).join("");
  const im=r.imgs&&r.imgs.length?`<div class="csec"><div class="ch">Attachments</div><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:220px;max-width:48%;margin:2px;break-inside:avoid">`).join("")}</div></div>`:"";
- return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date((r.day||iso(Date.now()))+"T00:00").toLocaleDateString("en-GB")}</span></div>`+body+im}
+ return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+body+im}
 function card(){$("#card").innerHTML=cardHTML(collect())}
 $("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList()};
 $("#bSave").onclick=save;
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
-$("#bAll").onclick=async()=>{const ks=Object.keys(db).filter(k=>db[k].day===day).sort();if(!ks.length){say("No saved babies on this day.");return}
+$("#bAll").onclick=async()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
  await Promise.all([...$("#all").querySelectorAll("img")].map(i=>i.decode?i.decode().catch(()=>0):new Promise(r=>{i.onload=i.onerror=r})));
  await new Promise(r=>setTimeout(r,250));document.body.classList.add("pa");window.print()};
@@ -300,13 +298,13 @@ function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...docum
  const S=x=>String(x==null?"":x).slice(0,500);
  const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
  const labs=(Array.isArray(o.labs)?o.labs:[]).slice(0,50).map(l=>({d:S(l.d),n:S(l.n),v:S(l.v)})).filter(l=>l.n&&l.v);
- let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,imgs:[],day:/^\d{4}-\d\d-\d\d$/.test(o.day||"")?o.day:day}}
+ let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,imgs:[]}}
 $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
- let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,day})}catch(e){say("Could not create the share code.");return}
+ let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps})}catch(e){say("Could not create the share code.");return}
  $("#shc").value="NICU Baby shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Share this baby";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bAllX").onclick=async()=>{const ks=Object.keys(db);if(!ks.length){say("No saved babies to transfer.");return}
- let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps,day:db[k].day}))})}catch(e){say("Could not create the code.");return}
+ let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps}))})}catch(e){say("Could not create the code.");return}
  $("#shc").value="NICU Baby transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Transfer all babies";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bShCopy").onclick=async()=>say(await copyTxt($("#shc").value)?"Copied. Paste it in a message.":"Select the text and copy it manually.");
@@ -316,27 +314,13 @@ $("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
 $("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
 $("#bImpGo").onclick=async()=>{let o,recs;
  try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,500).map(cleanRec)}catch(e){alert("That is not a valid NICU Baby share message.");return}
- const clash=recs.filter(r=>db[r.day+"|"+r.f.name.toLowerCase()]).length;let rp=true;
+ const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
  if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
- recs.forEach(rec=>{let name=rec.f.name,k=rec.day+"|"+name.toLowerCase();
-  if(db[k]&&!rp){let nm=name+" (copy)",i=2;while(db[rec.day+"|"+nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=rec.day+"|"+nm.toLowerCase()}
+ recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
+  if(db[k]&&!rp){let nm=name+" (copy)",i=2;while(db[nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=nm.toLowerCase()}
   else if(db[k])rec.imgs=db[k].imgs||[];
   rec.t=Date.now();db[k]=rec;cur=k});
- day=db[cur].day;persist();fill(db[cur]);setView(false);renderTabs();renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
-function allDays(){const s=new Set([day]);Object.values(db).forEach(r=>r.day&&s.add(r.day));return[...s].sort().reverse()}
-function renderTabs(){const el=$("#tabs");el.innerHTML="";allDays().forEach(d=>{const n=Object.values(db).filter(r=>r.day===d).length,b=document.createElement("button");b.className="tab"+(d===day?" on":"");b.innerHTML=esc(dl(d))+"<small> · "+n+"</small>";b.onclick=()=>setDay(d);el.append(b)});
- const l=document.createElement("label");l.className="tabadd";l.innerHTML='＋ Day <input type="date" id="dayIn" aria-label="Add day">';el.append(l);$("#dayIn").onchange=addDay}
-function setDay(d){day=d;cur=null;fill(null);setView(false);renderTabs();renderList()}
-function carry(from,to){const diff=Math.round((new Date(to+"T00:00")-new Date(from+"T00:00"))/864e5);
- Object.keys(db).filter(k=>db[k].day===from).forEach(k=>{const r=JSON.parse(JSON.stringify(db[k])),f=r.f;
-  Object.keys(f).forEach(x=>{if(/^(ex_|bgd$|ph$|pco2$|hco3$|be$|lac$|labd$|hb$|hct$|plt$|tlc$|ret$|cbcn$|tsb|dbil$|glu$|na$|k$|ca$|mg$|ur$|cr$|alt$|ast$|alb$)/.test(x))delete f[x]});
-  ["age","dadm"].forEach(x=>{if(f[x]!==undefined&&!isNaN(+f[x]))f[x]=String(+f[x]+diff)});
-  r.labs=[];r.crps=[];r.imgs=[];r.day=to;r.t=Date.now();db[to+"|"+f.name.toLowerCase()]=r});persist()}
-function addDay(){const d=$("#dayIn").value;if(!d)return;
- if(!Object.values(db).some(r=>r.day===d)){const prev=allDays().filter(x=>x<d&&Object.values(db).some(r=>r.day===x))[0];
-  if(prev){const n=Object.values(db).filter(r=>r.day===prev).length;
-   if(confirm("Copy the "+n+" baby record(s) from "+dl(prev)+" into the new day?\n\nOK = copy babies with their management (feeding, oxygen, fluids, drugs, notes, plan). Exam, labs and attachments are NOT copied, and age/day counters advance.\nCancel = start the day empty."))carry(prev,d)}}
- setDay(d)}
+ persist();fill(db[cur]);setView(false);renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
 let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}if(TH.a==="orange")TH.a="green";
 function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;document.documentElement.dataset.acc=TH.a;
  $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";document.querySelectorAll(".sw").forEach(b=>b.classList.toggle("on",b.dataset.a==TH.a));try{localStorage.setItem("nicu1theme",JSON.stringify(TH))}catch(e){}}
@@ -349,14 +333,14 @@ $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
  if(!confirm("Final confirmation: erase ALL data now?"))return;
- db={};tr={};day=iso(Date.now());cur=null;persist();fill(null);setView(false);renderList();renderTabs();say("All data has been reset.")};
-$("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderTabs();renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
+ db={};tr={};cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
+$("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
 $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
 $("#bClose").onclick=()=>$("#dlg").classList.remove("on");
-$("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,normDb(o));Object.keys(o).forEach(k=>{if(o[k]&&typeof o[k]=="object")o[k].t=Date.now()});persist();renderTabs();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
+$("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,normDb(o));Object.keys(o).forEach(k=>{if(o[k]&&typeof o[k]=="object")o[k].t=Date.now()});persist();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
 build();fill(null);persist();renderList();setInterval(renderTrash,6e4);
-applyTheme();applySb();renderTabs();
+applyTheme();applySb();
 </script>
 </body>
 </html>
