@@ -40,13 +40,14 @@ body.cv #card{display:block}body.cv #form{display:none}
 .cl{white-space:pre-line}.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
 .dlg h2{font-family:Georgia,serif;color:var(--acc)}
 .thm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sws{display:flex;gap:6px}.sw{width:24px;height:24px;padding:0;border-radius:50%;border:2px solid var(--line)}.sw.on{outline:2px solid var(--ink);outline-offset:1px}
-:root[data-acc="red"]{--acc:#b3261e;--acc2:#fbe0de}:root[data-acc="orange"]{--acc:#c2570c;--acc2:#fde6d2}:root[data-acc="purple"]{--acc:#6d3fc0;--acc2:#e8defa}
+:root[data-acc="red"]{--acc:#b3261e;--acc2:#fbe0de}:root[data-acc="green"]{--acc:#2e7d32;--acc2:#dcf0dd}:root[data-acc="purple"]{--acc:#6d3fc0;--acc2:#e8defa}
 :root[data-theme="dark"][data-acc="blue"]{--acc:#7ab2ff;--acc2:#1a2f4d;--onacc:#0b1a33}
-:root[data-theme="dark"][data-acc="red"]{--acc:#ff8a80;--acc2:#4a1f1c;--onacc:#2a0c0a}:root[data-theme="dark"][data-acc="orange"]{--acc:#ffa95c;--acc2:#4a2a10;--onacc:#2a1606}:root[data-theme="dark"][data-acc="purple"]{--acc:#b996ff;--acc2:#2e1f4f;--onacc:#1a0f33}
+:root[data-theme="dark"][data-acc="red"]{--acc:#ff8a80;--acc2:#4a1f1c;--onacc:#2a0c0a}:root[data-theme="dark"][data-acc="green"]{--acc:#6fd072;--acc2:#1c3a1e;--onacc:#0c2410}:root[data-theme="dark"][data-acc="purple"]{--acc:#b996ff;--acc2:#2e1f4f;--onacc:#1a0f33}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;align-items:center}.tab{white-space:nowrap;padding:7px 12px;border-radius:16px}.tab.on{background:var(--acc);border-color:var(--acc);color:var(--onacc)}.tab small{opacity:.8}
 .tabadd{flex-direction:row;align-items:center;gap:6px;white-space:nowrap;color:var(--acc);font-size:14px;font-weight:600}.tabadd input{width:auto;padding:4px 6px}
 details.tg{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:0 0 12px}details.tg>summary{cursor:pointer;font:17px Georgia,serif;color:var(--acc);padding:10px 14px;list-style:none}
 details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{content:"▾ "}details.tg>:not(summary){margin:0 12px 12px}
+aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-x:hidden;overflow-y:auto;max-height:240px;padding-bottom:0;margin:0}aside .tab{border-radius:6px;text-align:left;white-space:normal}aside .tabadd{padding:4px 2px}body.sbh aside{display:none}body.sbh .app{grid-template-columns:1fr}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -56,7 +57,7 @@ details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{conte
 .dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
-@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:260px;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}}
+@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:70vh;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}}
 @media print{body{background:#fff}aside,.bar,#form,.dlg,.ft,#tabs{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
 </style>
 </head>
@@ -64,7 +65,8 @@ details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{conte
 <div class="app">
 <aside>
  <h1>NICU Baby</h1>
- <div class="thm"><button id="bMode">Dark mode</button><span class="sws" role="group" aria-label="Accent color"><button class="sw" data-a="blue" aria-label="Blue" style="background:#1d5fbf"></button><button class="sw" data-a="red" aria-label="Red" style="background:#b3261e"></button><button class="sw" data-a="orange" aria-label="Orange" style="background:#c2570c"></button><button class="sw" data-a="purple" aria-label="Purple" style="background:#6d3fc0"></button></span></div>
+ <div class="thm"><button id="bMode">Dark mode</button><span class="sws" role="group" aria-label="Accent color"><button class="sw" data-a="blue" aria-label="Blue" style="background:#1d5fbf"></button><button class="sw" data-a="red" aria-label="Red" style="background:#b3261e"></button><button class="sw" data-a="green" aria-label="Green" style="background:#2e7d32"></button><button class="sw" data-a="purple" aria-label="Purple" style="background:#6d3fc0"></button></span></div>
+ <div id="tabs" class="tabs"></div>
  <button class="p" id="bNew">+ New baby</button>
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
  <small id="dayh" style="color:var(--mute)"></small>
@@ -76,8 +78,8 @@ details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{conte
  <small id="warn" style="color:var(--bad)"></small>
 </aside>
 <main>
- <div id="tabs" class="tabs"></div>
  <div class="bar">
+  <button id="bMenu" aria-label="Show or hide the side panel" aria-expanded="true" title="Menu" style="font-size:18px;padding:6px 12px">☰</button>
   <button class="p" id="bSave">Save baby</button>
   <button id="bView">Preview card</button>
   <button id="bShare">Share</button>
@@ -335,9 +337,12 @@ function addDay(){const d=$("#dayIn").value;if(!d)return;
   if(prev){const n=Object.values(db).filter(r=>r.day===prev).length;
    if(confirm("Copy the "+n+" baby record(s) from "+dl(prev)+" into the new day?\n\nOK = copy babies with their management (feeding, oxygen, fluids, drugs, notes, plan). Exam, labs and attachments are NOT copied, and age/day counters advance.\nCancel = start the day empty."))carry(prev,d)}}
  setDay(d)}
-let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}
+let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}if(TH.a==="orange")TH.a="green";
 function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;document.documentElement.dataset.acc=TH.a;
  $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";document.querySelectorAll(".sw").forEach(b=>b.classList.toggle("on",b.dataset.a==TH.a));try{localStorage.setItem("nicu1theme",JSON.stringify(TH))}catch(e){}}
+let SB=null;try{SB=localStorage.getItem("nicu1sb")}catch(e){}if(SB===null)SB=innerWidth>720?"1":"0";
+function applySb(){document.body.classList.toggle("sbh",SB!=="1");$("#bMenu").setAttribute("aria-expanded",SB==="1"?"true":"false");try{localStorage.setItem("nicu1sb",SB)}catch(e){}}
+$("#bMenu").onclick=()=>{SB=SB==="1"?"0":"1";applySb()};
 $("#bMode").onclick=()=>{TH.m=document.documentElement.dataset.theme=="dark"?"light":"dark";applyTheme()};
 document.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{TH.a=b.dataset.a;applyTheme()});
 $("#big").onclick=()=>$("#big").classList.remove("on");
@@ -351,7 +356,7 @@ $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.
 $("#bClose").onclick=()=>$("#dlg").classList.remove("on");
 $("#bRes").onclick=()=>{try{const o=JSON.parse($("#bakt").value);if(typeof o!="object"||!o)throw 0;Object.assign(db,normDb(o));Object.keys(o).forEach(k=>{if(o[k]&&typeof o[k]=="object")o[k].t=Date.now()});persist();renderTabs();renderList();$("#dlg").classList.remove("on");say("Restored.")}catch(e){alert("That text is not a valid backup.")}};
 build();fill(null);persist();renderList();setInterval(renderTrash,6e4);
-applyTheme();renderTabs();
+applyTheme();applySb();renderTabs();
 </script>
 </body>
 </html>
