@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NICU Baby</title>
+<title>Baby Record</title>
 <style>
 :root{--bg:#f2f6f7;--panel:#fff;--ink:#17303a;--mute:#5d737b;--line:#cbd8db;--acc:#1d5fbf;--acc2:#dce8fb;--onacc:#fff;--bad:#b4391b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b20;--panel:#16272d;--ink:#e3eef0;--mute:#8fa7ae;--line:#2c4249;--acc:#7ab2ff;--acc2:#1a2f4d;--onacc:#0b1a33;--bad:#ff8a6b}}
@@ -35,14 +35,11 @@ input,select,textarea{padding:7px 8px;border:1px solid var(--line);border-radius
 body.cv #card{display:block}body.cv #form{display:none}
 .gal{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.th{position:relative}.th img{height:90px;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}.th button{position:absolute;top:3px;right:3px;padding:0 7px;line-height:1.5}#big div{width:min(900px,100%)}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
-.sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
+.sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}.legend-toggle{display:flex;align-items:center;gap:8px}.section-toggle{width:auto!important;transform:scale(1.15);accent-color:var(--acc)}.sub-toggle{margin-right:8px}.toggle-off>*:not(legend){display:none!important}.sub-off{opacity:.7}.sub-off~label{display:none!important}
 .ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
 .cl{white-space:pre-line}.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
 .dlg h2{font-family:Georgia,serif;color:var(--acc)}
-.thm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sws{display:flex;gap:6px}.sw{width:24px;height:24px;padding:0;border-radius:50%;border:2px solid var(--line)}.sw.on{outline:2px solid var(--ink);outline-offset:1px}
-:root[data-acc="red"]{--acc:#b3261e;--acc2:#fbe0de}:root[data-acc="green"]{--acc:#2e7d32;--acc2:#dcf0dd}:root[data-acc="purple"]{--acc:#6d3fc0;--acc2:#e8defa}
-:root[data-theme="dark"][data-acc="blue"]{--acc:#7ab2ff;--acc2:#1a2f4d;--onacc:#0b1a33}
-:root[data-theme="dark"][data-acc="red"]{--acc:#ff8a80;--acc2:#4a1f1c;--onacc:#2a0c0a}:root[data-theme="dark"][data-acc="green"]{--acc:#6fd072;--acc2:#1c3a1e;--onacc:#0c2410}:root[data-theme="dark"][data-acc="purple"]{--acc:#b996ff;--acc2:#2e1f4f;--onacc:#1a0f33}
+.thm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;align-items:center}.tab{white-space:nowrap;padding:7px 12px;border-radius:16px}.tab.on{background:var(--acc);border-color:var(--acc);color:var(--onacc)}.tab small{opacity:.8}
 .tabadd{flex-direction:row;align-items:center;gap:6px;white-space:nowrap;color:var(--acc);font-size:14px;font-weight:600}.tabadd input{width:auto;padding:4px 6px}
 details.tg{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:0 0 12px}details.tg>summary{cursor:pointer;font:17px Georgia,serif;color:var(--acc);padding:10px 14px;list-style:none}
@@ -58,14 +55,14 @@ aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
 @media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:70vh;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}}
-@media print{body{background:#fff}aside,.bar,#form,.dlg,.ft,#tabs{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
+@media(max-width:720px){.app{display:block}aside{position:fixed;top:0;bottom:0;left:0;width:min(300px,85vw);height:100dvh;max-height:100dvh;z-index:10;border-right:1px solid var(--line);border-bottom:0;box-shadow:8px 0 24px #0003;transform:translateX(0);transition:transform .22s ease}body.sbh aside{display:flex;transform:translateX(-110%)}main{padding:12px}body:not(.sbh) main:before{content:"";position:fixed;inset:0;background:#0005;z-index:8;pointer-events:none}}\n@media print{body{background:#fff}aside,.bar,#form,.dlg,.ft,#tabs{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside>
- <h1>NICU Baby</h1>
- <div class="thm"><button id="bMode">Dark mode</button><span class="sws" role="group" aria-label="Accent color"><button class="sw" data-a="blue" aria-label="Blue" style="background:#1d5fbf"></button><button class="sw" data-a="red" aria-label="Red" style="background:#b3261e"></button><button class="sw" data-a="green" aria-label="Green" style="background:#2e7d32"></button><button class="sw" data-a="purple" aria-label="Purple" style="background:#6d3fc0"></button></span></div>
+ <h1>Baby Record</h1>
+ <div class="thm"><button id="bMode">Dark mode</button></div>
  <button class="p" id="bNew">+ New baby</button>
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
  <div id="list"></div>
@@ -165,7 +162,7 @@ function build(){
  $("#form").innerHTML=h;
  $("#aCrp").onclick=()=>crpRow();$("#aMed").onclick=()=>medRow();$("#aLab").onclick=()=>labRow();
  $("#imgIn").onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith("image/"))continue;const m=await shrink(f);if(m)imgs.push(m)}e.target.value="";drawImgs();say("Image added. Press Save baby to keep it.")};
- $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}upd();calc()};
+ $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}if(ev.target.dataset.sectionToggle)applySectionToggles();upd();calc()};
 }
 function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res({n:file.name,d:c.toDataURL("image/jpeg",.72)})};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
 function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{const w=document.createElement("div");w.className="th";const im=new Image();im.src=m.d;im.alt=m.n;im.title="Click to enlarge";
@@ -173,6 +170,16 @@ function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{con
  const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs()};w.append(im,x);el.append(w)})}
 function crpRow(v={}){const d=document.createElement("div");d.className="row c";d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="CRP date"><input type="number" step="any" inputmode="decimal" value="${esc(v.v||"")}"><button class="d" aria-label="Remove CRP">✕</button>`;d.lastChild.onclick=()=>{d.remove();crpLab()};$("#crps").append(d);crpLab()}
 function crpLab(){[...$("#crps").children].forEach((r,i)=>{const x=r.querySelectorAll("input")[1];x.placeholder=i?"Serial CRP #"+(i+1)+" (mg/L)":"Initial CRP (mg/L)";x.setAttribute("aria-label",x.placeholder)})}
+function applySectionToggles(){
+ document.querySelectorAll("[data-section-toggle]").forEach(b=>{
+  const on=b.checked,fs=b.closest("fieldset");
+  if(fs){fs.classList.toggle("toggle-off",!on);return}
+  const sub=b.closest(".sub");if(!sub)return;
+  sub.classList.toggle("sub-off",!on);
+  let el=sub.nextElementSibling;
+  while(el&&!el.classList.contains("sub")){el.style.display=on?"":"none";el=el.nextElementSibling}
+ });
+}
 function openSecs(){document.querySelectorAll("details.tg").forEach(d=>{d.open=[...d.querySelectorAll("[data-k],.row input")].some(e=>e.type=="checkbox"?e.checked:(e.value||"").trim()!=="")||(d.dataset.sec=="inv"&&imgs.length>0)})}
 function medRow(v={}){const d=document.createElement("div");d.className="row";
  d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
@@ -193,9 +200,9 @@ function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.da
 function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,n:i[1].value.trim(),v:i[2].value.trim()}}).filter(m=>m.n&&m.v);
- const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);return{f,meds,labs,crps,imgs:imgs.slice()}}
+ const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);const sections={};document.querySelectorAll("[data-section-toggle]").forEach(b=>sections[b.dataset.sectionToggle]=b.checked);return{f,meds,labs,crps,imgs:imgs.slice(),sections}}
 function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
- $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);calc();openSecs()}
+ $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";document.querySelectorAll("[data-section-toggle]").forEach(b=>b.checked=!r||!r.sections||r.sections[b.dataset.sectionToggle]!==false);applySectionToggles();(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);calc();openSecs()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
  el.innerHTML=ks.length?"<small>Recently deleted (restore within 24 h)</small>":"";
@@ -298,14 +305,14 @@ function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...docum
  const S=x=>String(x==null?"":x).slice(0,500);
  const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
  const labs=(Array.isArray(o.labs)?o.labs:[]).slice(0,50).map(l=>({d:S(l.d),n:S(l.n),v:S(l.v)})).filter(l=>l.n&&l.v);
- let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,imgs:[]}}
+ let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,imgs:[],sections:o.sections||{}}}
 $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
- let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps})}catch(e){say("Could not create the share code.");return}
- $("#shc").value="NICU Baby shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
+ let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,sections:r.sections})}catch(e){say("Could not create the share code.");return}
+ $("#shc").value="Baby Record shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Share this baby";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bAllX").onclick=async()=>{const ks=Object.keys(db);if(!ks.length){say("No saved babies to transfer.");return}
- let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps}))})}catch(e){say("Could not create the code.");return}
- $("#shc").value="NICU Baby transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
+ let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps,sections:db[k].sections}))})}catch(e){say("Could not create the code.");return}
+ $("#shc").value="Baby Record transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Transfer all babies";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bShCopy").onclick=async()=>say(await copyTxt($("#shc").value)?"Copied. Paste it in a message.":"Select the text and copy it manually.");
 $("#bShSend").onclick=()=>{try{navigator.share({text:$("#shc").value}).catch(()=>{})}catch(e){}};
@@ -313,7 +320,7 @@ $("#bShX").onclick=()=>$("#dlgS").classList.remove("on");
 $("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
 $("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
 $("#bImpGo").onclick=async()=>{let o,recs;
- try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,500).map(cleanRec)}catch(e){alert("That is not a valid NICU Baby share message.");return}
+ try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,500).map(cleanRec)}catch(e){alert("That is not a valid Baby Record share message.");return}
  const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
  if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
  recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
@@ -321,14 +328,14 @@ $("#bImpGo").onclick=async()=>{let o,recs;
   else if(db[k])rec.imgs=db[k].imgs||[];
   rec.t=Date.now();db[k]=rec;cur=k});
  persist();fill(db[cur]);setView(false);renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
-let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}if(TH.a==="orange")TH.a="green";
-function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;document.documentElement.dataset.acc=TH.a;
- $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";document.querySelectorAll(".sw").forEach(b=>b.classList.toggle("on",b.dataset.a==TH.a));try{localStorage.setItem("nicu1theme",JSON.stringify(TH))}catch(e){}}
+let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}TH.a="blue";
+function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;document.documentElement.dataset.acc="blue";
+ $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";try{localStorage.setItem("nicu1theme",JSON.stringify(TH))}catch(e){}}
 let SB=null;try{SB=localStorage.getItem("nicu1sb")}catch(e){}if(SB===null)SB=innerWidth>720?"1":"0";
 function applySb(){document.body.classList.toggle("sbh",SB!=="1");$("#bMenu").setAttribute("aria-expanded",SB==="1"?"true":"false");try{localStorage.setItem("nicu1sb",SB)}catch(e){}}
 $("#bMenu").onclick=()=>{SB=SB==="1"?"0":"1";applySb()};
 $("#bMode").onclick=()=>{TH.m=document.documentElement.dataset.theme=="dark"?"light":"dark";applyTheme()};
-document.querySelectorAll(".sw").forEach(b=>b.onclick=()=>{TH.a=b.dataset.a;applyTheme()});
+
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
