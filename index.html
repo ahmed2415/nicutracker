@@ -35,16 +35,20 @@ input,select,textarea{padding:7px 8px;border:1px solid var(--line);border-radius
 body.cv #card{display:block}body.cv #form{display:none}
 .gal{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.th{position:relative}.th img{height:90px;border-radius:6px;border:1px solid var(--line);cursor:zoom-in;display:block}.th button{position:absolute;top:3px;right:3px;padding:0 7px;line-height:1.5}#big div{width:min(900px,100%)}
 [hidden]{display:none!important}.ck{flex-direction:row;align-items:center;gap:8px;font-size:15px;color:var(--ink)}.ck input{width:auto;transform:scale(1.2)}
-.sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}.legend-toggle{display:flex;align-items:center;gap:8px}.section-toggle{width:auto!important;transform:scale(1.15);accent-color:var(--acc)}.sub-toggle{margin-right:8px}.toggle-off>*:not(legend){display:none!important}.sub-off{opacity:.7}.sub-off~label{display:none!important}
+.sub{grid-column:1/-1;font-weight:600;color:var(--acc);margin-top:6px;border-bottom:1px solid var(--line)}
 .ft{margin:28px 0 8px;text-align:center;font-size:11px;color:var(--mute)}
 .cl{white-space:pre-line}.cl,.cb,.ch{font-size:14px;line-height:1.5;padding:1px 4px}.ch{font-weight:700;margin-top:6px}.cb{padding-left:20px}.c1{font-weight:700;font-size:15px}
 .dlg h2{font-family:Georgia,serif;color:var(--acc)}
 .thm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+
+
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;align-items:center}.tab{white-space:nowrap;padding:7px 12px;border-radius:16px}.tab.on{background:var(--acc);border-color:var(--acc);color:var(--onacc)}.tab small{opacity:.8}
 .tabadd{flex-direction:row;align-items:center;gap:6px;white-space:nowrap;color:var(--acc);font-size:14px;font-weight:600}.tabadd input{width:auto;padding:4px 6px}
 details.tg{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:0 0 12px}details.tg>summary{cursor:pointer;font:17px Georgia,serif;color:var(--acc);padding:10px 14px;list-style:none}
 details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{content:"▾ "}details.tg>:not(summary){margin:0 12px 12px}
 aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-x:hidden;overflow-y:auto;max-height:240px;padding-bottom:0;margin:0}aside .tab{border-radius:6px;text-align:left;white-space:normal}aside .tabadd{padding:4px 2px}body.sbh aside{display:none}body.sbh .app{grid-template-columns:1fr}
+.sbh1{display:flex;justify-content:space-between;align-items:center;gap:8px}.sbb{display:none}details.tg details.tg{background:var(--bg)}.row.t{grid-template-columns:2fr 1fr 1fr auto}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -54,14 +58,15 @@ aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-
 .dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
-@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:static;max-height:70vh;border-right:0;border-bottom:1px solid var(--line)}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}}
-@media(max-width:720px){.app{display:block}aside{position:fixed;top:0;bottom:0;left:0;width:min(300px,85vw);height:100dvh;max-height:100dvh;z-index:10;border-right:1px solid var(--line);border-bottom:0;box-shadow:8px 0 24px #0003;transform:translateX(0);transition:transform .22s ease}body.sbh aside{display:flex;transform:translateX(-110%)}main{padding:12px}body:not(.sbh) main:before{content:"";position:fixed;inset:0;background:#0005;z-index:8;pointer-events:none}}\n@media print{body{background:#fff}aside,.bar,#form,.dlg,.ft,#tabs{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
+@media(max-width:720px){.app{grid-template-columns:1fr}aside{position:fixed;left:0;top:0;bottom:0;width:min(300px,85vw);max-height:none;z-index:20;box-shadow:2px 0 14px #0005;transition:transform .2s}body.sbh aside{display:flex!important;transform:translateX(-105%);visibility:hidden;box-shadow:none}body:not(.sbh) .sbb{display:block;position:fixed;inset:0;background:#0006;z-index:19}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}.row.t{grid-template-columns:1fr 1fr}}
+@media print{body{background:#fff}aside,.bar,#form,.dlg,.ft,#tabs{display:none!important}.app{display:block}main{padding:0;max-width:none}#card{display:block!important;border:1.5px solid #000}body.pa #card{display:none!important}body.pa #all{display:block}.cardx{border:1.5px solid #000;margin:0;break-after:page;max-width:none}.cardx:last-child{break-after:auto}@page{margin:10mm}}
 </style>
 </head>
 <body>
 <div class="app">
+<div class="sbb" id="sbBack"></div>
 <aside>
- <h1>Baby Record</h1>
+ <div class="sbh1"><h1>Baby Record</h1><button id="bSbX" aria-label="Hide the menu" title="Hide menu">✕</button></div>
  <div class="thm"><button id="bMode">Dark mode</button></div>
  <button class="p" id="bNew">+ New baby</button>
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
@@ -110,7 +115,7 @@ aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-
 </div></div>
 <script>
 const SEC=[
-["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (g)","n"],["cw","Current weight (g)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes/History","b"]]],
+["Baby",[["name","Baby name","t"],["sex","Sex","s",["Male","Female","Ambiguous"]],["dob","Date of birth","d"],["tob","Time of birth","tm"],["bw","Birth weight (Kg)","n"],["cw","Current weight (kg)","n"],["ga","GA at birth (weeks)","n"],["age","Postnatal age (days)","n"],["dadm","Days of admission","n"],["mode","Mode of delivery","s",["NVD","C-section"]],["dx","Diagnosis","a"],["dxn","Notes/History","b"]]],
 ["Respiratory support",[["o2","Oxygen","s",["Off O2","Free Flow","Nasal","CPAP","MV"]],
 ["flow","Flow (L/min)","n",0,"o2=Free Flow|Nasal"],
 ["cp_fio2","FiO₂ (%)","n",0,"o2=CPAP"],["cp_peep","PEEP (cmH₂O)","n",0,"o2=CPAP"],
@@ -122,7 +127,7 @@ const SEC=[
 ["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","w"]]],
 ["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
 ["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","w"]]],
-["Bilirubin & blood group",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
+["Bilirubin",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],]],["Blood group",[["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry",[["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["mg","Mg (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT/SGPT (U/L)","n"],["ast","AST/SGOT (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
 ["Blood gas",[["bgd","Date","d"],["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan","b"]]]];
@@ -132,55 +137,47 @@ try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorag
 function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
 function iso(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function dl(d){return new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
-function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
+function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";if(r.f.cw&&parseFloat(r.f.cw)>=20)r.f.cw=String(+(parseFloat(r.f.cw)/1000).toFixed(3));if(!r.tsbs)r.tsbs=[];const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
 db=normDb(db);{const t2={};for(const k in tr){const x=tr[k];if(!x||!x.rec)continue;const m=normDb({a:x.rec}),nk=Object.keys(m)[0];if(nk)t2[nk]=x}tr=t2}
 try{Object.values(db).forEach(r=>scrub(r.f));Object.values(tr).forEach(t=>scrub(t.rec.f))}catch(e){}
 const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
 const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function build(){
- let h="";
+ const TOP={"IV fluids":"iv","Feeding":"fd","Phototherapy":"pt"},INV={"CBC":"cbc","Bilirubin":"bil","Blood group":"bg","Chemistry":"chem","Blood gas":"abg"};
+ const dt=(sec,title,inner)=>`<details class="tg" data-sec="${sec}"><summary>${title}</summary>${inner}</details>`;
+ const F=fs=>{let z="";for(const[id,l,ty,o,c]of fs){const w=ty=="a"||ty=="w"||ty=="b"?" w2":"",dc=c?` data-if="${c}"`:"";
+  if(ty=="c"){z+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
+  z+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"||ty=="b"?`<textarea rows="2" ${ty=="b"?"data-bullet=1 ":""}data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":ty=="tm"?"time":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`}return z};
+ let h="",inv="";
  for(const[t,fs]of SEC){
-  if(t=="CBC")h+=`<details class="tg" data-sec="inv"><summary>Investigations</summary>`;
-  if(t=="Examination")h+=`<details class="tg" data-sec="ex"><summary>Examination</summary><div class="g">`;
-  else h+=`<fieldset><legend>${t}</legend><div class="g">`;
-  for(const[id,l,ty,o,c]of fs){
-   const w=ty=="a"||ty=="w"||ty=="b"?" w2":"";
-   if(ty=="h"){h+=`<div class="sub">${l}</div>`;continue}
-   const dc=c?` data-if="${c}"`:"";
-   if(ty=="c"){h+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
-   h+=`<label class="${w}"${dc}>${l}`+(ty=="s"?`<select data-k="${id}"><option value=""></option>${o.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select>`:ty=="a"||ty=="b"?`<textarea rows="2" ${ty=="b"?"data-bullet=1 ":""}data-k="${id}"></textarea>`:`<input data-k="${id}" type="${ty=="n"?"number":ty=="d"?"date":ty=="tm"?"time":"text"}" ${ty=="n"?'step="any" inputmode="decimal"':""}>`)+`</label>`;
-  }
-  h+=`</div>`;
-  if(t=="Feeding")h+=`<div class="calc" id="calc"></div>`;
-  if(t=="Chemistry")h+=`</fieldset><fieldset><legend>CRP</legend><div id="crps"></div><button id="aCrp">+ Add serial CRP</button>`;
-  if(t=="Phototherapy")h+=`</fieldset><fieldset><legend>Medications</legend><div id="meds"></div><button id="aMed">+ Add medication</button>`;
-  if(t=="Blood gas")h+=`</fieldset><fieldset><legend>Other labs</legend><div id="labs"></div><button id="aLab">+ Add lab</button></fieldset><fieldset><legend>Attachments</legend><div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`;
-  h+=t=="Examination"?`</details>`:`</fieldset>`;
-  if(t=="Blood gas")h+=`</details>`;
+  if(!INV[t]&&inv){h+=dt("inv","Investigations",inv);inv=""}
+  if(t=="Examination"){const gs=[];fs.forEach(f=>{if(f[2]=="h")gs.push({t:f[1],f:[]});else gs[gs.length-1].f.push(f)});
+   h+=dt("ex","Examination",gs.map((g,i)=>dt("ex"+i,g.t,`<div class="g">${F(g.f)}</div>`)).join(""));continue}
+  let body=`<div class="g">${F(fs)}</div>`;
+  if(t=="Feeding")body+=`<div class="calc" id="calc"></div>`;
+  if(t=="Bilirubin")body+=`<div id="tsbs"></div><button id="aTsb">+ Add old TSB</button>`;
+  const sec=TOP[t]||INV[t];
+  let out=sec?dt(sec,t,body):`<fieldset><legend>${t}</legend>${body}</fieldset>`;
+  if(t=="Chemistry")out+=dt("crp","CRP",`<div id="crps"></div><button id="aCrp">+ Add serial CRP</button>`);
+  if(t=="Phototherapy")out+=`<fieldset><legend>Medications</legend><div id="meds"></div><button id="aMed">+ Add medication</button></fieldset>`;
+  if(t=="Blood gas")out+=dt("oth","Other labs",`<div id="labs"></div><button id="aLab">+ Add lab</button>`)+dt("att","Attachments",`<div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`);
+  if(INV[t])inv+=out;else h+=out;
  }
+ if(inv)h+=dt("inv","Investigations",inv);
  $("#form").innerHTML=h;
- $("#aCrp").onclick=()=>crpRow();$("#aMed").onclick=()=>medRow();$("#aLab").onclick=()=>labRow();
+ $("#aTsb").onclick=()=>tsbRow();$("#aCrp").onclick=()=>crpRow();$("#aMed").onclick=()=>medRow();$("#aLab").onclick=()=>labRow();
  $("#imgIn").onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith("image/"))continue;const m=await shrink(f);if(m)imgs.push(m)}e.target.value="";drawImgs();say("Image added. Press Save baby to keep it.")};
- $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}if(ev.target.dataset.sectionToggle)applySectionToggles();upd();calc()};
+ $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}upd();calc()};
 }
 function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res({n:file.name,d:c.toDataURL("image/jpeg",.72)})};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
 function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{const w=document.createElement("div");w.className="th";const im=new Image();im.src=m.d;im.alt=m.n;im.title="Click to enlarge";
  im.onclick=()=>{$("#bigimg").src=m.d;$("#big").classList.add("on")};
  const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs()};w.append(im,x);el.append(w)})}
+function tsbRow(v={}){const d=document.createElement("div");d.className="row t";d.innerHTML=`<input type="number" step="any" inputmode="decimal" placeholder="Old TSB (mg/dl)" value="${esc(v.v||"")}" aria-label="Old TSB value"><input type="number" step="any" inputmode="decimal" placeholder="Age" value="${esc(v.a||"")}" aria-label="Age at old TSB"><select aria-label="Hours or days"><option value="days">days</option><option value="hours">hours</option></select><button class="d" aria-label="Remove old TSB">✕</button>`;d.querySelector("select").value=v.u==="hours"?"hours":"days";d.lastChild.onclick=()=>d.remove();$("#tsbs").append(d)}
 function crpRow(v={}){const d=document.createElement("div");d.className="row c";d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="CRP date"><input type="number" step="any" inputmode="decimal" value="${esc(v.v||"")}"><button class="d" aria-label="Remove CRP">✕</button>`;d.lastChild.onclick=()=>{d.remove();crpLab()};$("#crps").append(d);crpLab()}
 function crpLab(){[...$("#crps").children].forEach((r,i)=>{const x=r.querySelectorAll("input")[1];x.placeholder=i?"Serial CRP #"+(i+1)+" (mg/L)":"Initial CRP (mg/L)";x.setAttribute("aria-label",x.placeholder)})}
-function applySectionToggles(){
- document.querySelectorAll("[data-section-toggle]").forEach(b=>{
-  const on=b.checked,fs=b.closest("fieldset");
-  if(fs){fs.classList.toggle("toggle-off",!on);return}
-  const sub=b.closest(".sub");if(!sub)return;
-  sub.classList.toggle("sub-off",!on);
-  let el=sub.nextElementSibling;
-  while(el&&!el.classList.contains("sub")){el.style.display=on?"":"none";el=el.nextElementSibling}
- });
-}
-function openSecs(){document.querySelectorAll("details.tg").forEach(d=>{d.open=[...d.querySelectorAll("[data-k],.row input")].some(e=>e.type=="checkbox"?e.checked:(e.value||"").trim()!=="")||(d.dataset.sec=="inv"&&imgs.length>0)})}
+function openSecs(){document.querySelectorAll("details.tg").forEach(d=>{d.open=[...d.querySelectorAll("[data-k],.row input")].some(e=>e.type=="checkbox"?e.checked:(e.value||"").trim()!=="")||((d.dataset.sec=="inv"||d.dataset.sec=="att")&&imgs.length>0)})}
 function medRow(v={}){const d=document.createElement("div");d.className="row";
  d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
  d.lastChild.onclick=()=>d.remove();$("#meds").append(d)}
@@ -188,7 +185,7 @@ function labRow(v={}){const d=document.createElement("div");d.className="row l";
  d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="Date"><input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
  d.lastChild.onclick=()=>d.remove();$("#labs").append(d)}
 const num=k=>parseFloat(($(`[data-k="${k}"]`)||{}).value);
-function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=parseFloat(f.cw)||parseFloat(f.bw);
+function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=parseFloat(f.cw)>0?parseFloat(f.cw)*1000:parseFloat(f.bw);
  if(ga>=0&&ag>=0){const t=ga+ag/7;o.push(["PMA",`${Math.floor(t)}+${Math.round((t%1)*7)} wks`])}
  if(r>0&&w>0)o.push(["IV fluid",`${(r*24/(w/1000)).toFixed(0)} ml/kg/day`]);
  const fv=parseFloat(f.fdv),ff=parseFloat(f.fdf);
@@ -200,9 +197,9 @@ function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.da
 function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,n:i[1].value.trim(),v:i[2].value.trim()}}).filter(m=>m.n&&m.v);
- const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);const sections={};document.querySelectorAll("[data-section-toggle]").forEach(b=>sections[b.dataset.sectionToggle]=b.checked);return{f,meds,labs,crps,imgs:imgs.slice(),sections}}
+ const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);const tsbs=[...$("#tsbs").children].map(r=>{const i=r.querySelectorAll("input");return{v:i[0].value.trim(),a:i[1].value.trim(),u:r.querySelector("select").value}}).filter(x=>x.v);return{f,meds,labs,crps,tsbs,imgs:imgs.slice()}}
 function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
- $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";document.querySelectorAll("[data-section-toggle]").forEach(b=>b.checked=!r||!r.sections||r.sections[b.dataset.sectionToggle]!==false);applySectionToggles();(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);calc();openSecs()}
+ $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";$("#tsbs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);(r&&r.tsbs?r.tsbs:[]).forEach(tsbRow);calc();openSecs()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
  el.innerHTML=ks.length?"<small>Recently deleted (restore within 24 h)</small>":"";
@@ -217,7 +214,7 @@ function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
  const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>db[b].t-db[a].t);
  $("#list").innerHTML=ks.length?"":`<small>${Object.keys(db).length?"No match.":"No saved babies yet. Fill the form and press Save baby."}</small>`;
  ks.forEach(k=>{const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
-  const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList()};$("#list").append(b)})}
+  const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};$("#list").append(b)})}
 function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first.");$('[data-k="name"]').focus();return}
  const k=r.f.name.toLowerCase();
  if(k!==cur&&db[k]&&!confirm("A baby with this name already exists. Replace the saved record?"))return;
@@ -232,7 +229,7 @@ function blocks(r){
  const flat=v=>items(v).join("; "),J=a=>a.filter(Boolean).join(", "),pv=(l,v,u)=>v?l+" "+v+(u||""):"";
  const kg=g=>{const n=parseFloat(g);return n>0?(+(n/1000).toFixed(3))+"kg":""};
  const gc=g=>{const n=parseFloat(g);return !(n>0)?"":n<34?"PT":n<37?"LPT":n<39?"FT (Early term)":n<42?"FT":"Post-term"};
- const l1=J([f.sex,f.ga&&(gc(f.ga)?gc(f.ga)+" ":"")+f.ga+"Wk",kg(f.cw||f.bw),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
+ const l1=J([f.sex,f.ga&&(gc(f.ga)?gc(f.ga)+" ":"")+f.ga+"Wk",(parseFloat(f.cw)>0?+parseFloat(f.cw)+"kg":kg(f.bw)),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
  if(l1)L("",l1);
  const born=J([fd(f.dob),f.tob&&"at "+ft(f.tob)]).replace(", at "," at ");
  const dl=f.age&&f.dadm?"D"+f.age+"/D"+f.dadm:f.age?"D"+f.age:f.dadm?"Admission D"+f.dadm:"";
@@ -264,7 +261,7 @@ function blocks(r){
  // labs
  const LB=[],cb=J([pv("Hb",f.hb),pv("Hct",f.hct),pv("PLT",f.plt),pv("TLC",f.tlc),pv("Retics",f.ret)]),cn=flat(f.cbcn);
  if(cb||cn)LB.push("CBC"+par(cb)+(cn?" — "+cn:""));
- const tb=J([f.tsb&&"TSB "+f.tsb+(f.tsba?" / "+((f.tsbu||"hours")==="days"?"D"+f.tsba:f.tsba+"h"):""),pv("Direct",f.dbil)]);if(tb)LB.push(tb);
+ const tb=J([f.tsb&&"TSB "+f.tsb+(f.tsba?" / "+((f.tsbu||"hours")==="days"?"D"+f.tsba:f.tsba+"h"):""),pv("Direct",f.dbil)]);if(tb)LB.push(tb);const ots=(r.tsbs||[]).map(x=>x.v+(x.a?" / "+(x.u==="hours"?x.a+"h":"D"+x.a):"")).join(", ");if(ots)LB.push("Old TSB: "+ots);
  const bg=J([f.bgb&&"baby "+f.bgb,f.bgm&&"mother "+f.bgm]),bgc=J([bg&&"Blood group: "+bg,pv("Coombs",f.coombs)]);if(bgc)LB.push(bgc);
  if(r.crps&&r.crps.length)LB.push("CRP: "+r.crps.map((c,i)=>c.v+(i==0||c.d?" ("+J([i==0&&"initial",c.d&&fd(c.d)])+")":"")).join(", "));if(f.glu)LB.push("RBS: "+f.glu);
  [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT",f.alt),pv("AST",f.ast),pv("Alb",f.alb)]),
@@ -279,7 +276,7 @@ function cardHTML(r){const f=r.f;
  const im=r.imgs&&r.imgs.length?`<div class="csec"><div class="ch">Attachments</div><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:220px;max-width:48%;margin:2px;break-inside:avoid">`).join("")}</div></div>`:"";
  return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+body+im}
 function card(){$("#card").innerHTML=cardHTML(collect())}
-$("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList()};
+$("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
 $("#bSave").onclick=save;
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
 $("#bAll").onclick=async()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
@@ -305,13 +302,13 @@ function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...docum
  const S=x=>String(x==null?"":x).slice(0,500);
  const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
  const labs=(Array.isArray(o.labs)?o.labs:[]).slice(0,50).map(l=>({d:S(l.d),n:S(l.n),v:S(l.v)})).filter(l=>l.n&&l.v);
- let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,imgs:[],sections:o.sections||{}}}
+ let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";if(f.cw&&parseFloat(f.cw)>=20)f.cw=String(+(parseFloat(f.cw)/1000).toFixed(3));const tsbs=(Array.isArray(o.tsbs)?o.tsbs:[]).slice(0,30).map(x=>({v:S(x.v),a:S(x.a),u:S(x.u)})).filter(x=>x.v);scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,tsbs,imgs:[]}}
 $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
- let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,sections:r.sections})}catch(e){say("Could not create the share code.");return}
- $("#shc").value="Baby Record shared record. Open the app, tap Import shared baby and paste this message:\n"+code;
+ let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,tsbs:r.tsbs})}catch(e){say("Could not create the share code.");return}
+ $("#shc").value="Baby Record data. Open the app, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Share this baby";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bAllX").onclick=async()=>{const ks=Object.keys(db);if(!ks.length){say("No saved babies to transfer.");return}
- let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps,sections:db[k].sections}))})}catch(e){say("Could not create the code.");return}
+ let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps,tsbs:db[k].tsbs}))})}catch(e){say("Could not create the code.");return}
  $("#shc").value="Baby Record transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Transfer all babies";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
 $("#bShCopy").onclick=async()=>say(await copyTxt($("#shc").value)?"Copied. Paste it in a message.":"Select the text and copy it manually.");
@@ -328,14 +325,15 @@ $("#bImpGo").onclick=async()=>{let o,recs;
   else if(db[k])rec.imgs=db[k].imgs||[];
   rec.t=Date.now();db[k]=rec;cur=k});
  persist();fill(db[cur]);setView(false);renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
-let TH={m:null,a:"blue"};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}TH.a="blue";
-function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;document.documentElement.dataset.acc="blue";
- $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";try{localStorage.setItem("nicu1theme",JSON.stringify(TH))}catch(e){}}
+let TH={m:null};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}
+function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;
+ $("#bMode").textContent=m=="dark"?"Light mode":"Dark mode";try{localStorage.setItem("nicu1theme",JSON.stringify({m:TH.m}))}catch(e){}}
 let SB=null;try{SB=localStorage.getItem("nicu1sb")}catch(e){}if(SB===null)SB=innerWidth>720?"1":"0";
 function applySb(){document.body.classList.toggle("sbh",SB!=="1");$("#bMenu").setAttribute("aria-expanded",SB==="1"?"true":"false");try{localStorage.setItem("nicu1sb",SB)}catch(e){}}
 $("#bMenu").onclick=()=>{SB=SB==="1"?"0":"1";applySb()};
+$("#bSbX").onclick=$("#sbBack").onclick=()=>{SB="0";applySb()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&SB==="1"&&innerWidth<=720){SB="0";applySb()}});
 $("#bMode").onclick=()=>{TH.m=document.documentElement.dataset.theme=="dark"?"light":"dark";applyTheme()};
-
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
