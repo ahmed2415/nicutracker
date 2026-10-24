@@ -49,13 +49,14 @@ details.tg{background:var(--panel);border:1px solid var(--line);border-radius:8p
 details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{content:"▾ "}details.tg>:not(summary){margin:0 12px 12px}
 aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-x:hidden;overflow-y:auto;max-height:240px;padding-bottom:0;margin:0}aside .tab{border-radius:6px;text-align:left;white-space:normal}aside .tabadd{padding:4px 2px}body.sbh aside{display:none}body.sbh .app{grid-template-columns:1fr}
 .sbh1{display:flex;justify-content:space-between;align-items:center;gap:8px}.sbb{display:none}details.tg details.tg{background:var(--bg)}.row.t{grid-template-columns:2fr 1fr 1fr auto}
+.gear summary{cursor:pointer;list-style:none;padding:8px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}.gear .gm{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
 .csec h2{font-size:12.5px;margin:0 0 3px;padding:1px 6px;background:#e4e4e4;color:#000}
 .cg{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:13px;padding:0 4px}.cg b{font-weight:600}
 .cg .full{flex-basis:100%}
-.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
 .dlg.on{display:flex}.dlg div{background:var(--panel);padding:14px;border-radius:8px;width:min(560px,100%)}
 .dlg textarea{height:200px}
 @media(max-width:720px){.app{grid-template-columns:1fr}aside{position:fixed;left:0;top:0;bottom:0;width:min(300px,85vw);max-height:none;z-index:20;box-shadow:2px 0 14px #0005;transition:transform .2s}body.sbh aside{display:flex!important;transform:translateX(-105%);visibility:hidden;box-shadow:none}body:not(.sbh) .sbb{display:block;position:fixed;inset:0;background:#0006;z-index:19}.row{grid-template-columns:1fr 1fr}.row.l{grid-template-columns:1fr 1fr}.row.c{grid-template-columns:1fr 1fr auto}.row.t{grid-template-columns:1fr 1fr}}
@@ -72,9 +73,11 @@ aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-
  <input id="q" type="search" placeholder="Search by name" aria-label="Search babies">
  <div id="list"></div>
  <div id="trash"></div>
- <button id="bAllX">Transfer all babies</button>
- <button id="bImp">Import shared baby</button>
- <button id="bBak">Backup / restore</button>
+ <details class="gear"><summary aria-label="Settings">⚙ Settings</summary><div class="gm">
+  <button id="bAllX">Transfer all babies</button>
+  <button id="bImp">Import shared baby</button>
+  <button id="bBak">Backup / restore</button>
+ </div></details>
  <small id="warn" style="color:var(--bad)"></small>
 </aside>
 <main>
@@ -137,14 +140,14 @@ try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorag
 function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
 function iso(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function dl(d){return new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
-function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";if(r.f.cw&&parseFloat(r.f.cw)>=20)r.f.cw=String(+(parseFloat(r.f.cw)/1000).toFixed(3));if(!r.tsbs)r.tsbs=[];const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
+function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";if(r.f.cw&&parseFloat(r.f.cw)>=20)r.f.cw=String(+(parseFloat(r.f.cw)/1000).toFixed(3));if(r.f.bw&&parseFloat(r.f.bw)>=20)r.f.bw=String(+(parseFloat(r.f.bw)/1000).toFixed(3));if(!r.tsbs)r.tsbs=[];const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
 db=normDb(db);{const t2={};for(const k in tr){const x=tr[k];if(!x||!x.rec)continue;const m=normDb({a:x.rec}),nk=Object.keys(m)[0];if(nk)t2[nk]=x}tr=t2}
 try{Object.values(db).forEach(r=>scrub(r.f));Object.values(tr).forEach(t=>scrub(t.rec.f))}catch(e){}
 const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
 const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function build(){
- const TOP={"IV fluids":"iv","Feeding":"fd","Phototherapy":"pt"},INV={"CBC":"cbc","Bilirubin":"bil","Blood group":"bg","Chemistry":"chem","Blood gas":"abg"};
+ const TOP={"IV fluids":"iv","Feeding":"fd","Phototherapy":"pt","Respiratory support":"rs"},INV={"CBC":"cbc","Bilirubin":"bil","Blood group":"bg","Chemistry":"chem","Blood gas":"abg"};
  const dt=(sec,title,inner)=>`<details class="tg" data-sec="${sec}"><summary>${title}</summary>${inner}</details>`;
  const F=fs=>{let z="";for(const[id,l,ty,o,c]of fs){const w=ty=="a"||ty=="w"||ty=="b"?" w2":"",dc=c?` data-if="${c}"`:"";
   if(ty=="c"){z+=`<label class="ck"${dc}><input data-k="${id}" type="checkbox">${l}</label>`;continue}
@@ -160,7 +163,7 @@ function build(){
   const sec=TOP[t]||INV[t];
   let out=sec?dt(sec,t,body):`<fieldset><legend>${t}</legend>${body}</fieldset>`;
   if(t=="Chemistry")out+=dt("crp","CRP",`<div id="crps"></div><button id="aCrp">+ Add serial CRP</button>`);
-  if(t=="Phototherapy")out+=`<fieldset><legend>Medications</legend><div id="meds"></div><button id="aMed">+ Add medication</button></fieldset>`;
+  if(t=="Phototherapy")out+=dt("med","Medications",`<div id="meds"></div><button id="aMed">+ Add medication</button>`);
   if(t=="Blood gas")out+=dt("oth","Other labs",`<div id="labs"></div><button id="aLab">+ Add lab</button>`)+dt("att","Attachments",`<div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`);
   if(INV[t])inv+=out;else h+=out;
  }
@@ -185,7 +188,7 @@ function labRow(v={}){const d=document.createElement("div");d.className="row l";
  d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="Date"><input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
  d.lastChild.onclick=()=>d.remove();$("#labs").append(d)}
 const num=k=>parseFloat(($(`[data-k="${k}"]`)||{}).value);
-function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=parseFloat(f.cw)>0?parseFloat(f.cw)*1000:parseFloat(f.bw);
+function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=(parseFloat(f.cw)||parseFloat(f.bw))*1000;
  if(ga>=0&&ag>=0){const t=ga+ag/7;o.push(["PMA",`${Math.floor(t)}+${Math.round((t%1)*7)} wks`])}
  if(r>0&&w>0)o.push(["IV fluid",`${(r*24/(w/1000)).toFixed(0)} ml/kg/day`]);
  const fv=parseFloat(f.fdv),ff=parseFloat(f.fdf);
@@ -229,7 +232,7 @@ function blocks(r){
  const flat=v=>items(v).join("; "),J=a=>a.filter(Boolean).join(", "),pv=(l,v,u)=>v?l+" "+v+(u||""):"";
  const kg=g=>{const n=parseFloat(g);return n>0?(+(n/1000).toFixed(3))+"kg":""};
  const gc=g=>{const n=parseFloat(g);return !(n>0)?"":n<34?"PT":n<37?"LPT":n<39?"FT (Early term)":n<42?"FT":"Post-term"};
- const l1=J([f.sex,f.ga&&(gc(f.ga)?gc(f.ga)+" ":"")+f.ga+"Wk",(parseFloat(f.cw)>0?+parseFloat(f.cw)+"kg":kg(f.bw)),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
+ const l1=J([f.sex,f.ga&&(gc(f.ga)?gc(f.ga)+" ":"")+f.ga+"Wk",(x=>parseFloat(x)>0?+parseFloat(x)+"kg":"")(f.cw||f.bw),{NVD:"NVD","C-section":"CS"}[f.mode]||f.mode,f.dx]);
  if(l1)L("",l1);
  const born=J([fd(f.dob),f.tob&&"at "+ft(f.tob)]).replace(", at "," at ");
  const dl=f.age&&f.dadm?"D"+f.age+"/D"+f.dadm:f.age?"D"+f.age:f.dadm?"Admission D"+f.dadm:"";
@@ -302,7 +305,7 @@ function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...docum
  const S=x=>String(x==null?"":x).slice(0,500);
  const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
  const labs=(Array.isArray(o.labs)?o.labs:[]).slice(0,50).map(l=>({d:S(l.d),n:S(l.n),v:S(l.v)})).filter(l=>l.n&&l.v);
- let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";if(f.cw&&parseFloat(f.cw)>=20)f.cw=String(+(parseFloat(f.cw)/1000).toFixed(3));const tsbs=(Array.isArray(o.tsbs)?o.tsbs:[]).slice(0,30).map(x=>({v:S(x.v),a:S(x.a),u:S(x.u)})).filter(x=>x.v);scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,tsbs,imgs:[]}}
+ let crps=(Array.isArray(o.crps)?o.crps:[]).slice(0,30).map(c=>({d:S(c.d),v:S(c.v)})).filter(c=>c.v);if(!crps.length&&o.f.crp)crps=[{d:"",v:S(o.f.crp)}];if(f.o2==="Room air")f.o2="Off O2";if(f.cw&&parseFloat(f.cw)>=20)f.cw=String(+(parseFloat(f.cw)/1000).toFixed(3));if(f.bw&&parseFloat(f.bw)>=20)f.bw=String(+(parseFloat(f.bw)/1000).toFixed(3));const tsbs=(Array.isArray(o.tsbs)?o.tsbs:[]).slice(0,30).map(x=>({v:S(x.v),a:S(x.a),u:S(x.u)})).filter(x=>x.v);scrub(f);if(!f.name)throw 0;return{f,meds,labs,crps,tsbs,imgs:[]}}
 $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the baby's name first.");return}
  let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,tsbs:r.tsbs})}catch(e){say("Could not create the share code.");return}
  $("#shc").value="Baby Record data. Open the app, tap Import shared baby and paste this message:\n"+code;
@@ -331,6 +334,7 @@ function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-col
 let SB=null;try{SB=localStorage.getItem("nicu1sb")}catch(e){}if(SB===null)SB=innerWidth>720?"1":"0";
 function applySb(){document.body.classList.toggle("sbh",SB!=="1");$("#bMenu").setAttribute("aria-expanded",SB==="1"?"true":"false");try{localStorage.setItem("nicu1sb",SB)}catch(e){}}
 $("#bMenu").onclick=()=>{SB=SB==="1"?"0":"1";applySb()};
+document.querySelector(".gear").addEventListener("click",e=>{if(e.target.closest(".gm button")){setTimeout(()=>{document.querySelector(".gear").open=false},0);if(innerWidth<=720){SB="0";applySb()}}});
 $("#bSbX").onclick=$("#sbBack").onclick=()=>{SB="0";applySb()};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&SB==="1"&&innerWidth<=720){SB="0";applySb()}});
 $("#bMode").onclick=()=>{TH.m=document.documentElement.dataset.theme=="dark"?"light":"dark";applyTheme()};
