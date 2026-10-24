@@ -128,7 +128,7 @@ const SEC=[
 ["IV fluids",[["ivt","Fluid type","s",["D10W","Neoment","Custom Mix"]],["ivr","Rate (ml/hr)","n"],["gir","GIR (mg/kg/min)","n"],["ivn","Additives / notes","t"]]],
 ["Feeding",[["fdt","Feed type","s",["NPO","FT Formula","PT Formula","Breast milk","Fortification"]],["fdm","Mix between","w",0,"fdt=Fortification"],["fdv","Volume per feed (ml)","n"],["fdf","Every (hrs)","n"],["fdr","Route","s",["Oral","Ryle"]],["fdn","Notes","w"]]],
 ["Phototherapy",[["pt","Type","s",["None","Single","Double","Triple","Intensive"]],["pts","Started on","d"],["ptn","Notes","w"]]],
-["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"]]],
+["Examination",[["","Respiratory","h"],["ex_ae","Air entry","s",["Bilateral Equal","Diminished bilaterally","Diminished on Rt","Diminished on Lt"]],["ex_rr","RR (/min)","n"],["ex_rn","Notes","w"],["","CVS","h"],["ex_hr","HR (/min)","n"],["ex_crt","CRT","s",["<3 sec",">3 sec"]],["ex_col","Color","s",["Pink","Pale","Cyanosed","Icteric"]],["ex_cn","Notes","w"],["","CNS","h"],["ex_act","Activity","t"],["ex_moro","Moro reflex","s",["+ve bilaterally","+ve on Rt only","+ve on Lt only"]],["ex_suck","Suckling reflex","s",["Good","Weak"]],["ex_nn","Notes","w"],["","Renal","h"],["ex_uop","UOP (mL/kg/hr)","n"],["ex_un","Notes","w"],["","Notes","h"],["ex_gn","Notes","a"]]],
 ["CBC",[["labd","Lab date","d"],["hb","Hb (g/dl)","n"],["hct","Hct (%)","n"],["plt","PLT (×10³/µL)","n"],["tlc","TLC (×10³/µL)","n"],["ret","Retics (%)","n"],["cbcn","Notes","w"]]],
 ["Bilirubin",[["tsb","TSB (mg/dl)","n"],["tsba","Age at TSB","n"],["tsbu","Hours or days","s",["hours","days"]],["dbil","Direct bili (mg/dl)","n"],]],["Blood group",[["bgb","Blood group (baby)","t"],["bgm","Blood group (mother)","t"],["coombs","Coombs","s",["Negative","Positive"]]]],
 ["Chemistry",[["glu","RBS (mg/dl)","n"],["na","Na (mmol/L)","n"],["k","K (mmol/L)","n"],["ca","Ca (mg/dl)","n"],["mg","Mg (mg/dl)","n"],["ur","Urea (mg/dl)","n"],["cr","Creatinine (mg/dl)","n"],["alt","ALT/SGPT (U/L)","n"],["ast","AST/SGOT (U/L)","n"],["alb","Albumin (g/dl)","n"]]],
@@ -162,7 +162,7 @@ function build(){
   if(t=="Bilirubin")body+=`<div id="tsbs"></div><button id="aTsb">+ Add old TSB</button>`;
   const sec=TOP[t]||INV[t];
   let out=sec?dt(sec,t,body):`<fieldset><legend>${t}</legend>${body}</fieldset>`;
-  if(t=="Chemistry")out+=dt("crp","CRP",`<div id="crps"></div><button id="aCrp">+ Add serial CRP</button>`);
+  if(t=="Chemistry")out+=dt("crp","CRP",`<div id="crps"></div><button id="aCrp">+ Add old CRP</button>`);
   if(t=="Phototherapy")out+=dt("med","Medications",`<div id="meds"></div><button id="aMed">+ Add medication</button>`);
   if(t=="Blood gas")out+=dt("oth","Other labs",`<div id="labs"></div><button id="aLab">+ Add lab</button>`)+dt("att","Attachments",`<div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`);
   if(INV[t])inv+=out;else h+=out;
@@ -179,7 +179,7 @@ function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{con
  const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs()};w.append(im,x);el.append(w)})}
 function tsbRow(v={}){const d=document.createElement("div");d.className="row t";d.innerHTML=`<input type="number" step="any" inputmode="decimal" placeholder="Old TSB (mg/dl)" value="${esc(v.v||"")}" aria-label="Old TSB value"><input type="number" step="any" inputmode="decimal" placeholder="Age" value="${esc(v.a||"")}" aria-label="Age at old TSB"><select aria-label="Hours or days"><option value="days">days</option><option value="hours">hours</option></select><button class="d" aria-label="Remove old TSB">✕</button>`;d.querySelector("select").value=v.u==="hours"?"hours":"days";d.lastChild.onclick=()=>d.remove();$("#tsbs").append(d)}
 function crpRow(v={}){const d=document.createElement("div");d.className="row c";d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="CRP date"><input type="number" step="any" inputmode="decimal" value="${esc(v.v||"")}"><button class="d" aria-label="Remove CRP">✕</button>`;d.lastChild.onclick=()=>{d.remove();crpLab()};$("#crps").append(d);crpLab()}
-function crpLab(){[...$("#crps").children].forEach((r,i)=>{const x=r.querySelectorAll("input")[1];x.placeholder=i?"Serial CRP #"+(i+1)+" (mg/L)":"Initial CRP (mg/L)";x.setAttribute("aria-label",x.placeholder)})}
+function crpLab(){[...$("#crps").children].forEach((r,i)=>{const x=r.querySelectorAll("input")[1];x.placeholder=i?"Old CRP #"+i+" (mg/L)":"Last CRP (mg/L)";x.setAttribute("aria-label",x.placeholder)})}
 function openSecs(){document.querySelectorAll("details.tg").forEach(d=>{d.open=[...d.querySelectorAll("[data-k],.row input")].some(e=>e.type=="checkbox"?e.checked:(e.value||"").trim()!=="")||((d.dataset.sec=="inv"||d.dataset.sec=="att")&&imgs.length>0)})}
 function medRow(v={}){const d=document.createElement("div");d.className="row";
  d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
@@ -259,14 +259,14 @@ function blocks(r){
  if(r.meds.length)L("Drugs:",r.meds.map(m=>[m.n,m.d,m.r,m.f].filter(Boolean).join(" ")).join(", "));
  // exam
  const ex=[["Resp",[pv("Air entry",f.ex_ae),pv("RR",f.ex_rr),flat(f.ex_rn)]],["CVS",[pv("HR",f.ex_hr),pv("CRT",f.ex_crt),f.ex_col,flat(f.ex_cn)]],
-  ["CNS",[pv("Activity",f.ex_act),pv("Moro",f.ex_moro),pv("Suckling",f.ex_suck),flat(f.ex_nn)]],["Renal",[pv("UOP",f.ex_uop),flat(f.ex_un)]]].map(([n,a])=>J(a)?n+": "+J(a):"").filter(Boolean);
+  ["CNS",[pv("Activity",f.ex_act),pv("Moro",f.ex_moro),pv("Suckling",f.ex_suck),flat(f.ex_nn)]],["Renal",[pv("UOP",f.ex_uop),flat(f.ex_un)]],["Notes",[flat(f.ex_gn)]]].map(([n,a])=>J(a)?n+": "+J(a):"").filter(Boolean);
  if(ex.length){H("Exam:");ex.forEach(I)}
  // labs
  const LB=[],cb=J([pv("Hb",f.hb),pv("Hct",f.hct),pv("PLT",f.plt),pv("TLC",f.tlc),pv("Retics",f.ret)]),cn=flat(f.cbcn);
  if(cb||cn)LB.push("CBC"+par(cb)+(cn?" — "+cn:""));
  const tb=J([f.tsb&&"TSB "+f.tsb+(f.tsba?" / "+((f.tsbu||"hours")==="days"?"D"+f.tsba:f.tsba+"h"):""),pv("Direct",f.dbil)]);if(tb)LB.push(tb);const ots=(r.tsbs||[]).map(x=>x.v+(x.a?" / "+(x.u==="hours"?x.a+"h":"D"+x.a):"")).join(", ");if(ots)LB.push("Old TSB: "+ots);
  const bg=J([f.bgb&&"baby "+f.bgb,f.bgm&&"mother "+f.bgm]),bgc=J([bg&&"Blood group: "+bg,pv("Coombs",f.coombs)]);if(bgc)LB.push(bgc);
- if(r.crps&&r.crps.length)LB.push("CRP: "+r.crps.map((c,i)=>c.v+(i==0||c.d?" ("+J([i==0&&"initial",c.d&&fd(c.d)])+")":"")).join(", "));if(f.glu)LB.push("RBS: "+f.glu);
+ if(r.crps&&r.crps.length)LB.push("CRP: "+r.crps.map((c,i)=>c.v+" ("+J([i==0?"last":"old",c.d&&fd(c.d)])+")").join(", "));if(f.glu)LB.push("RBS: "+f.glu);
  [J([pv("Na",f.na),pv("K",f.k),pv("Ca",f.ca),pv("Mg",f.mg)]),J([pv("Urea",f.ur),pv("Creat",f.cr)]),J([pv("ALT",f.alt),pv("AST",f.ast),pv("Alb",f.alb)]),
   (x=>x?"ABG"+(f.bgd?" ("+fd(f.bgd)+")":"")+": "+x:"")(J([pv("pH",f.ph),pv("pCO2",f.pco2),pv("HCO3",f.hco3),pv("BE",f.be),pv("Lactate",f.lac)]))].forEach(x=>{if(x)LB.push(x)});
  r.labs.forEach(l=>LB.push(l.n+": "+l.v+(l.d?" ("+fd(l.d)+")":"")));
