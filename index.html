@@ -50,6 +50,7 @@ details.tg>summary::before{content:"▸ "}details.tg[open]>summary::before{conte
 aside .tabs{flex-direction:column;flex-wrap:nowrap;align-items:stretch;overflow-x:hidden;overflow-y:auto;max-height:240px;padding-bottom:0;margin:0}aside .tab{border-radius:6px;text-align:left;white-space:normal}aside .tabadd{padding:4px 2px}body.sbh aside{display:none}body.sbh .app{grid-template-columns:1fr}
 .sbh1{display:flex;justify-content:space-between;align-items:center;gap:8px}.sbb{display:none}details.tg details.tg{background:var(--bg)}.row.t{grid-template-columns:2fr 1fr 1fr auto}
 .gear summary{cursor:pointer;list-style:none;padding:8px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}.gear .gm{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.itw{display:flex;gap:4px;align-items:stretch}.itw .item{flex:1;min-width:0}.grip{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;padding:0 8px;display:flex;align-items:center;color:var(--mute);border:1px solid var(--line);border-radius:6px;font-size:16px;letter-spacing:-2px}.itw.drag{opacity:.75;outline:2px solid var(--acc);border-radius:6px}
 #all{display:none}.cardx{background:#fff;color:#000;border:1.5px solid #000;padding:14px 16px;max-width:760px;margin-bottom:12px}
 .chd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
 .cname{font-size:24px;font-weight:700}.csec{margin:0 0 7px;break-inside:avoid}
@@ -135,16 +136,16 @@ const SEC=[
 ["Blood gas",[["bgd","Date","d"],["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan","b"]]]];
 const $=s=>document.querySelector(s);
-let imgs=[],db={},tr={},cur=null,mem=false;const DAY=864e5;
-try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}")}catch(e){mem=true}
+let imgs=[],db={},tr={},ord=[],cur=null,mem=false;const DAY=864e5;
+try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}");ord=JSON.parse(localStorage.getItem("nicu1ord")||"[]")}catch(e){mem=true}
 function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
 function iso(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function dl(d){return new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
 function normDb(o){const n={};for(const k in o){const r=o[k];if(!r||!r.f)continue;delete r.day;if(!r.crps)r.crps=r.f.crp?[{d:"",v:String(r.f.crp)}]:[];delete r.f.crp;if(r.f.o2==="Room air")r.f.o2="Off O2";if(r.f.cw&&parseFloat(r.f.cw)>=20)r.f.cw=String(+(parseFloat(r.f.cw)/1000).toFixed(3));if(r.f.bw&&parseFloat(r.f.bw)>=20)r.f.bw=String(+(parseFloat(r.f.bw)/1000).toFixed(3));if(!r.tsbs)r.tsbs=[];const nk=String(r.f.name||k).toLowerCase();if(n[nk]&&(n[nk].t||0)>(r.t||0))continue;n[nk]=r}return n}
-db=normDb(db);{const t2={};for(const k in tr){const x=tr[k];if(!x||!x.rec)continue;const m=normDb({a:x.rec}),nk=Object.keys(m)[0];if(nk)t2[nk]=x}tr=t2}
+db=normDb(db);if(!Array.isArray(ord))ord=[];{const t2={};for(const k in tr){const x=tr[k];if(!x||!x.rec)continue;const m=normDb({a:x.rec}),nk=Object.keys(m)[0];if(nk)t2[nk]=x}tr=t2}
 try{Object.values(db).forEach(r=>scrub(r.f));Object.values(tr).forEach(t=>scrub(t.rec.f))}catch(e){}
 const purge=()=>{const n=Date.now();for(const k in tr)if(n-tr[k].del>DAY)delete tr[k]};
-const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
+const persist=()=>{purge();try{localStorage.setItem("nicu1",JSON.stringify(db));localStorage.setItem("nicu1trash",JSON.stringify(tr));localStorage.setItem("nicu1ord",JSON.stringify(ord))}catch(e){mem=true;$("#warn").textContent="Storage full or unavailable: recent changes may be lost. Use Backup and remove large images.";return false}$("#warn").textContent="";return true};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function build(){
  const TOP={"IV fluids":"iv","Feeding":"fd","Phototherapy":"pt","Respiratory support":"rs"},INV={"CBC":"cbc","Bilirubin":"bil","Blood group":"bg","Chemistry":"chem","Blood gas":"abg"};
@@ -214,14 +215,27 @@ function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
   x.onclick=()=>{if(confirm("Permanently delete this record? This cannot be undone.")){delete tr[k];persist();renderTrash();say("Permanently deleted.")}};
   w.append(b,x);el.append(w)})}
 function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
- const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>db[b].t-db[a].t);
+ const rk=k=>ord.indexOf(k);
+ const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>{const x=rk(a),y=rk(b);return x===y?(db[b].t||0)-(db[a].t||0):x-y});
  $("#list").innerHTML=ks.length?"":`<small>${Object.keys(db).length?"No match.":"No saved babies yet. Fill the form and press Save baby."}</small>`;
- ks.forEach(k=>{const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
-  const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};$("#list").append(b)})}
+ ks.forEach(k=>{const w=document.createElement("div");w.className="itw";w.dataset.k=k;
+  const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
+  const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;b.onclick=()=>{cur=k;fill(r);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
+  w.append(b);
+  if(!q){const g=document.createElement("span");g.className="grip";g.textContent="⋮⋮";g.title="Drag to reorder";g.setAttribute("role","button");g.setAttribute("aria-label","Drag to reorder "+r.f.name);
+   g.onpointerdown=e=>{e.preventDefault();g.setPointerCapture(e.pointerId);w.classList.add("drag");const list=$("#list"),as=$("aside");
+    const mv=ev=>{const y=ev.clientY,ar=as.getBoundingClientRect();if(y<ar.top+40)as.scrollTop-=12;else if(y>ar.bottom-40)as.scrollTop+=12;
+     let ref=null;for(const c of [...list.children]){if(c===w)continue;const rc=c.getBoundingClientRect();if(y<rc.top+rc.height/2){ref=c;break}}
+     if(ref!==w.nextSibling)list.insertBefore(w,ref)};
+    const up=()=>{g.removeEventListener("pointermove",mv);g.removeEventListener("pointerup",up);g.removeEventListener("pointercancel",up);w.classList.remove("drag");
+     ord=[...list.querySelectorAll(".itw")].map(c=>c.dataset.k);persist();renderList()};
+    g.addEventListener("pointermove",mv);g.addEventListener("pointerup",up);g.addEventListener("pointercancel",up)};
+   w.append(g)}
+  $("#list").append(w)})}
 function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first.");$('[data-k="name"]').focus();return}
  const k=r.f.name.toLowerCase();
  if(k!==cur&&db[k]&&!confirm("A baby with this name already exists. Replace the saved record?"))return;
- if(cur&&k!==cur)delete db[cur];
+ if(cur&&k!==cur){const oi=ord.indexOf(cur);if(oi>=0)ord[oi]=k;delete db[cur]}
  r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved.":"Could not save: storage is full. Remove some images.")}
 function setView(on){document.body.classList.toggle("cv",on);$("#bView").textContent=on?"Back to editing":"Preview card";if(on)card()}
 function items(v){return(v||"").split("\n").map(x=>x.replace(/^\s*•?\s*/,"").trim()).filter(Boolean)}
@@ -342,7 +356,7 @@ $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
  if(!confirm("Final confirmation: erase ALL data now?"))return;
- db={};tr={};cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
+ db={};tr={};ord=[];cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
 $("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
 $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
