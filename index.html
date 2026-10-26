@@ -198,11 +198,11 @@ function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=
 function calc(){$("#calc").textContent=derived(collect().f).map(x=>x[0]+": "+x[1]).join("   |   ")}
 const gv=id=>{const e=$(`[data-k="${id}"]`);return e?(e.type=="checkbox"?(e.checked?"Yes":""):e.value):""};
 function upd(){document.querySelectorAll("[data-if]").forEach(l=>{l.hidden=!l.dataset.if.split("&").every(c=>{const[a,b]=c.split("=");return b.split("|").includes(gv(a))})})}
-function collect(){const f={};upd();document.querySelectorAll("[data-k]").forEach(e=>{if(e.closest("label").hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
+function collect(){const f={};upd();$("#form").querySelectorAll("[data-k]").forEach(e=>{const lb=e.closest("label");if(lb&&lb.hidden)return;let v=gv(e.dataset.k).trim();if(e.dataset.bullet)v=items(v).map(x=>"• "+x).join("\n");if(v!=="")f[e.dataset.k]=v});
  const meds=[...$("#meds").children].map(r=>{const i=r.querySelectorAll("input");return{n:i[0].value.trim(),d:i[1].value.trim(),r:i[2].value.trim(),f:i[3].value.trim()}}).filter(m=>m.n);
  const labs=[...$("#labs").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,n:i[1].value.trim(),v:i[2].value.trim()}}).filter(m=>m.n&&m.v);
  const crps=[...$("#crps").children].map(r=>{const i=r.querySelectorAll("input");return{d:i[0].value,v:i[1].value.trim()}}).filter(c=>c.v);const tsbs=[...$("#tsbs").children].map(r=>{const i=r.querySelectorAll("input");return{v:i[0].value.trim(),a:i[1].value.trim(),u:r.querySelector("select").value}}).filter(x=>x.v);return{f,meds,labs,crps,tsbs,imgs:imgs.slice()}}
-function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();document.querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
+function fill(r){imgs=r&&r.imgs?r.imgs.slice():[];drawImgs();$("#form").querySelectorAll("[data-k]").forEach(e=>{let v=(r&&r.f[e.dataset.k])||"";if(v==="undefined")v="";if(e.type=="checkbox")e.checked=v=="Yes";else e.value=v});upd();
  $("#meds").innerHTML="";$("#labs").innerHTML="";$("#crps").innerHTML="";$("#tsbs").innerHTML="";(r?r.meds:[]).forEach(medRow);(r?r.labs:[]).forEach(labRow);(r&&r.crps&&r.crps.length?r.crps:[{}]).forEach(crpRow);(r&&r.tsbs?r.tsbs:[]).forEach(tsbRow);calc();openSecs()}
 const say=t=>{$("#msg").textContent=t;setTimeout(()=>$("#msg").textContent="",2500)};
 function renderTrash(){purge();const ks=Object.keys(tr),el=$("#trash");
@@ -218,7 +218,7 @@ function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
  const rk=k=>ord.indexOf(k);
  const ks=Object.keys(db).filter(k=>db[k].f.name.toLowerCase().includes(q)).sort((a,b)=>{const x=rk(a),y=rk(b);return x===y?(db[b].t||0)-(db[a].t||0):x-y});
  $("#list").innerHTML=ks.length?"":`<small>${Object.keys(db).length?"No match.":"No saved babies yet. Fill the form and press Save baby."}</small>`;
- ks.forEach(k=>{const w=document.createElement("div");w.className="itw";w.dataset.k=k;
+ ks.forEach(k=>{const w=document.createElement("div");w.className="itw";w.dataset.bk=k;
   const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
   const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;
   b.onclick=()=>{if(skipClick)return;cur=k;fill(r);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
@@ -235,7 +235,7 @@ function startPress(e,w){if(e.button>0)return;const sx=e.clientX,sy=e.clientY,pi
   if(line)line.remove();w.classList.remove("drag");w.style.transform="";dragging=false;if(on)setTimeout(()=>{skipClick=false},80)};
  function mv(ev){y=ev.clientY;if(!on){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>8)stop();return}place()}
  function up(){if(!on){stop();return}const ref=target;stop();list.insertBefore(w,ref||hint());
-  ord=[...list.querySelectorAll(".itw")].map(c=>c.dataset.k);persist();renderList()}
+  ord=[...list.querySelectorAll(".itw")].map(c=>c.dataset.bk);persist();renderList()}
  function cancel(){stop()}
  w.addEventListener("pointermove",mv);w.addEventListener("pointerup",up);w.addEventListener("pointercancel",cancel);
  t=setTimeout(()=>{on=true;dragging=true;skipClick=true;y0=as.scrollTop;w.classList.add("drag");try{w.setPointerCapture(pid)}catch(_){}
@@ -304,7 +304,7 @@ function cardHTML(r){const f=r.f;
  return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+body+im}
 function card(){$("#card").innerHTML=cardHTML(collect())}
 $("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
-$("#bSave").onclick=save;
+$("#bSave").onclick=()=>{try{save()}catch(e){say("Save failed: "+((e&&e.message)||e))}};
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
 $("#bAll").onclick=async()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
@@ -324,7 +324,7 @@ async function unpack(t){const m=/NICU([01]):([A-Za-z0-9_-]+)/.exec(t||"");if(!m
  let u8=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
  if(m[1]==="1")u8=new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer());
  return JSON.parse(new TextDecoder().decode(u8))}
-function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...document.querySelectorAll("[data-k]")].map(e=>e.dataset.k),f={};
+function cleanRec(o){if(!o||typeof o!="object"||!o.f)throw 0;const ids=[...$("#form").querySelectorAll("[data-k]")].map(e=>e.dataset.k),f={};
  ids.forEach(k=>{if(o.f[k]!=null&&String(o.f[k]).trim()!=="")f[k]=String(o.f[k]).slice(0,2000)});
  const S=x=>String(x==null?"":x).slice(0,500);
  const meds=(Array.isArray(o.meds)?o.meds:[]).slice(0,50).map(m=>({n:S(m.n),d:S(m.d),r:S(m.r),f:S(m.f)})).filter(m=>m.n);
@@ -344,7 +344,7 @@ $("#bShX").onclick=()=>$("#dlgS").classList.remove("on");
 $("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
 $("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
 $("#bImpGo").onclick=async()=>{let o,recs;
- try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,500).map(cleanRec)}catch(e){alert("That is not a valid Baby Record share message.");return}
+ try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,5000).map(cleanRec)}catch(e){alert("That is not a valid Baby Record share message.");return}
  const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
  if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
  recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
