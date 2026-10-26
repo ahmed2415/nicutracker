@@ -136,7 +136,7 @@ const SEC=[
 ["Blood gas",[["bgd","Date","d"],["ph","pH","n"],["pco2","pCO₂ (mmHg)","n"],["hco3","HCO₃ (mmol/L)","n"],["be","BE","n"],["lac","Lactate (mmol/L)","n"]]],
 ["Plan / notes",[["plan","Plan","b"]]]];
 const $=s=>document.querySelector(s);
-let imgs=[],db={},tr={},ord=[],dragging=false,skipClick=false,cur=null,mem=false;const DAY=864e5;
+let imgs=[],db={},tr={},ord=[],saveT=null,dragging=false,skipClick=false,cur=null,mem=false;const DAY=864e5;
 try{db=JSON.parse(localStorage.getItem("nicu1")||"{}");tr=JSON.parse(localStorage.getItem("nicu1trash")||"{}");ord=JSON.parse(localStorage.getItem("nicu1ord")||"[]")}catch(e){mem=true}
 function scrub(f){for(const k in f){const v=String(f[k]).replace(/^(\s*•\s*)?undefined/,"$1").replace(/(\n)\s*•?\s*undefined\s*(?=\n|$)/g,"").trim();if(k==="name"){if(v)f[k]=v}else if(!v||v==="•")delete f[k];else f[k]=v}}
 function iso(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -165,29 +165,29 @@ function build(){
   let out=sec?dt(sec,t,body):`<fieldset><legend>${t}</legend>${body}</fieldset>`;
   if(t=="Chemistry")out+=dt("crp","CRP",`<div id="crps"></div><button id="aCrp">+ Add old CRP</button>`);
   if(t=="Phototherapy")out+=dt("med","Medications",`<div id="meds"></div><button id="aMed">+ Add medication</button>`);
-  if(t=="Blood gas")out+=dt("oth","Other labs",`<div id="labs"></div><button id="aLab">+ Add lab</button>`)+dt("att","Attachments",`<div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Press Save baby to keep them.</small>`);
+  if(t=="Blood gas")out+=dt("oth","Other labs",`<div id="labs"></div><button id="aLab">+ Add lab</button>`)+dt("att","Attachments",`<div id="imgs" class="gal"></div><label>Add photos or scans<input id="imgIn" type="file" accept="image/*" multiple></label><small style="color:var(--mute)">Images are compressed and stored on this device only. Saved automatically with the baby.</small>`);
   if(INV[t])inv+=out;else h+=out;
  }
  if(inv)h+=dt("inv","Investigations",inv);
  $("#form").innerHTML=h;
  $("#aTsb").onclick=()=>tsbRow();$("#aCrp").onclick=()=>crpRow();$("#aMed").onclick=()=>medRow();$("#aLab").onclick=()=>labRow();
- $("#imgIn").onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith("image/"))continue;const m=await shrink(f);if(m)imgs.push(m)}e.target.value="";drawImgs();say("Image added. Press Save baby to keep it.")};
- $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}upd();calc()};
+ $("#imgIn").onchange=async e=>{for(const f of e.target.files){if(!f.type.startsWith("image/"))continue;const m=await shrink(f);if(m)imgs.push(m)}e.target.value="";drawImgs();auto();say("Image added.")};
+ $("#form").oninput=$("#form").onchange=ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(ev.target.checked){if(k=="mvc")$('[data-k="mvh"]').checked=false;if(k=="mvh")$('[data-k="mvc"]').checked=false}upd();calc();auto()};
 }
 function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1280/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res({n:file.name,d:c.toDataURL("image/jpeg",.72)})};im.onerror=()=>res(null);im.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
 function drawImgs(){const el=$("#imgs");el.innerHTML="";imgs.forEach((m,i)=>{const w=document.createElement("div");w.className="th";const im=new Image();im.src=m.d;im.alt=m.n;im.title="Click to enlarge";
  im.onclick=()=>{$("#bigimg").src=m.d;$("#big").classList.add("on")};
- const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs()};w.append(im,x);el.append(w)})}
-function tsbRow(v={}){const d=document.createElement("div");d.className="row t";d.innerHTML=`<input type="number" step="any" inputmode="decimal" placeholder="Old TSB (mg/dl)" value="${esc(v.v||"")}" aria-label="Old TSB value"><input type="number" step="any" inputmode="decimal" placeholder="Age" value="${esc(v.a||"")}" aria-label="Age at old TSB"><select aria-label="Hours or days"><option value="days">days</option><option value="hours">hours</option></select><button class="d" aria-label="Remove old TSB">✕</button>`;d.querySelector("select").value=v.u==="hours"?"hours":"days";d.lastChild.onclick=()=>d.remove();$("#tsbs").append(d)}
-function crpRow(v={}){const d=document.createElement("div");d.className="row c";d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="CRP date"><input type="number" step="any" inputmode="decimal" value="${esc(v.v||"")}"><button class="d" aria-label="Remove CRP">✕</button>`;d.lastChild.onclick=()=>{d.remove();crpLab()};$("#crps").append(d);crpLab()}
+ const x=document.createElement("button");x.className="d";x.textContent="✕";x.setAttribute("aria-label","Remove image");x.onclick=()=>{imgs.splice(i,1);drawImgs();auto()};w.append(im,x);el.append(w)})}
+function tsbRow(v={}){const d=document.createElement("div");d.className="row t";d.innerHTML=`<input type="number" step="any" inputmode="decimal" placeholder="Old TSB (mg/dl)" value="${esc(v.v||"")}" aria-label="Old TSB value"><input type="number" step="any" inputmode="decimal" placeholder="Age" value="${esc(v.a||"")}" aria-label="Age at old TSB"><select aria-label="Hours or days"><option value="days">days</option><option value="hours">hours</option></select><button class="d" aria-label="Remove old TSB">✕</button>`;d.querySelector("select").value=v.u==="hours"?"hours":"days";d.lastChild.onclick=()=>{d.remove();auto()};$("#tsbs").append(d)}
+function crpRow(v={}){const d=document.createElement("div");d.className="row c";d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="CRP date"><input type="number" step="any" inputmode="decimal" value="${esc(v.v||"")}"><button class="d" aria-label="Remove CRP">✕</button>`;d.lastChild.onclick=()=>{d.remove();crpLab();auto()};$("#crps").append(d);crpLab()}
 function crpLab(){[...$("#crps").children].forEach((r,i)=>{const x=r.querySelectorAll("input")[1];x.placeholder=i?"Old CRP #"+i+" (mg/L)":"Last CRP (mg/L)";x.setAttribute("aria-label",x.placeholder)})}
 function openSecs(){document.querySelectorAll("details.tg").forEach(d=>{d.open=[...d.querySelectorAll("[data-k],.row input")].some(e=>e.type=="checkbox"?e.checked:(e.value||"").trim()!=="")||((d.dataset.sec=="inv"||d.dataset.sec=="att")&&imgs.length>0)})}
 function medRow(v={}){const d=document.createElement("div");d.className="row";
  d.innerHTML=`<input placeholder="Drug" value="${esc(v.n||"")}" aria-label="Drug"><input placeholder="Dose" value="${esc(v.d||"")}" aria-label="Dose"><input placeholder="Route" value="${esc(v.r||"")}" aria-label="Route"><input placeholder="Frequency" value="${esc(v.f||"")}" aria-label="Frequency"><button class="d" aria-label="Remove">✕</button>`;
- d.lastChild.onclick=()=>d.remove();$("#meds").append(d)}
+ d.lastChild.onclick=()=>{d.remove();auto()};$("#meds").append(d)}
 function labRow(v={}){const d=document.createElement("div");d.className="row l";
  d.innerHTML=`<input type="date" value="${esc(v.d||"")}" aria-label="Date"><input placeholder="Test (e.g. Ferritin)" value="${esc(v.n||"")}" aria-label="Test"><input placeholder="Result" value="${esc(v.v||"")}" aria-label="Result"><button class="d" aria-label="Remove">✕</button>`;
- d.lastChild.onclick=()=>d.remove();$("#labs").append(d)}
+ d.lastChild.onclick=()=>{d.remove();auto()};$("#labs").append(d)}
 const num=k=>parseFloat(($(`[data-k="${k}"]`)||{}).value);
 function derived(f){const o=[];const ga=parseFloat(f.ga),ag=parseFloat(f.age),r=parseFloat(f.ivr),w=(parseFloat(f.cw)||parseFloat(f.bw))*1000;
  if(ga>=0&&ag>=0){const t=ga+ag/7;o.push(["PMA",`${Math.floor(t)}+${Math.round((t%1)*7)} wks`])}
@@ -221,7 +221,7 @@ function renderList(){renderTrash();const q=$("#q").value.toLowerCase();
  ks.forEach(k=>{const w=document.createElement("div");w.className="itw";w.dataset.bk=k;
   const b=document.createElement("button");b.className="item"+(k==cur?" on":"");
   const r=db[k];b.innerHTML=`${esc(r.f.name)}<small>${esc(r.f.dx||"")}</small>`;
-  b.onclick=()=>{if(skipClick)return;cur=k;fill(r);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
+  b.onclick=()=>{if(skipClick)return;flush();cur=k;fill(db[k]);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
   w.append(b);w.oncontextmenu=e=>e.preventDefault();if(!q)w.onpointerdown=e=>startPress(e,w);
   $("#list").append(w)});
  if(!q&&ks.length>1){const h=document.createElement("small");h.className="hint";h.textContent="Tip: press and hold a name, then drag to reorder.";$("#list").append(h)}}
@@ -242,6 +242,14 @@ function startPress(e,w){if(e.button>0)return;const sx=e.clientX,sy=e.clientY,pi
   if(navigator.vibrate)try{navigator.vibrate(25)}catch(_){}
   line=document.createElement("div");line.className="dropline";place();
   tick=setInterval(()=>{const ar=as.getBoundingClientRect();if(y<ar.top+40)as.scrollTop-=10;else if(y>ar.bottom-40)as.scrollTop+=10;place()},40)},450)}
+function auto(){clearTimeout(saveT);saveT=setTimeout(autoSave,500)}
+function flush(){if(saveT){clearTimeout(saveT);autoSave()}}
+function autoSave(){saveT=null;const r=collect();
+ if(!r.f.name){if(Object.keys(r.f).length)say("Enter the baby's name to start autosave.");return}
+ const k=r.f.name.toLowerCase();
+ if(k!==cur&&db[k]){say("That name already exists. Use a different name to save.");return}
+ if(cur&&k!==cur){const oi=ord.indexOf(cur);if(oi>=0)ord[oi]=k;delete db[cur]}
+ r.t=Date.now();db[k]=r;cur=k;const ok=persist();renderList();say(ok?"Saved":"Could not save: storage is full. Remove some images.")}
 function save(){const r=collect();if(!r.f.name){say("Enter the baby's name first.");$('[data-k="name"]').focus();return}
  const k=r.f.name.toLowerCase();
  if(k!==cur&&db[k]&&!confirm("A baby with this name already exists. Replace the saved record?"))return;
@@ -303,8 +311,8 @@ function cardHTML(r){const f=r.f;
  const im=r.imgs&&r.imgs.length?`<div class="csec"><div class="ch">Attachments</div><div class="cg">${r.imgs.map(m=>`<img src="${m.d}" alt="" style="max-height:220px;max-width:48%;margin:2px;break-inside:avoid">`).join("")}</div></div>`:"";
  return `<div class="chd"><span class="cname">${esc(f.name||"Unnamed baby")}</span><span>NICU · ${new Date().toLocaleDateString("en-GB")}</span></div>`+body+im}
 function card(){$("#card").innerHTML=cardHTML(collect())}
-$("#bNew").onclick=()=>{cur=null;fill(null);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
-$("#bSave").onclick=()=>{try{save()}catch(e){say("Save failed: "+((e&&e.message)||e))}};
+$("#bNew").onclick=()=>{flush();cur=null;fill(null);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
+$("#bSave").onclick=()=>{clearTimeout(saveT);saveT=null;try{save()}catch(e){say("Save failed: "+((e&&e.message)||e))}};
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
 $("#bAll").onclick=async()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
@@ -343,7 +351,7 @@ $("#bShSend").onclick=()=>{try{navigator.share({text:$("#shc").value}).catch(()=
 $("#bShX").onclick=()=>$("#dlgS").classList.remove("on");
 $("#bImp").onclick=()=>{$("#imc").value="";$("#dlgI").classList.add("on")};
 $("#bImpX").onclick=()=>$("#dlgI").classList.remove("on");
-$("#bImpGo").onclick=async()=>{let o,recs;
+$("#bImpGo").onclick=async()=>{flush();let o,recs;
  try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,5000).map(cleanRec)}catch(e){alert("That is not a valid Baby Record share message.");return}
  const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
  if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
@@ -363,12 +371,13 @@ $("#bSbX").onclick=$("#sbBack").onclick=()=>{SB="0";applySb()};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&SB==="1"&&innerWidth<=720){SB="0";applySb()}});
 $("#bMode").onclick=()=>{TH.m=document.documentElement.dataset.theme=="dark"?"light":"dark";applyTheme()};
 $("#list").addEventListener("touchmove",ev=>{if(dragging)ev.preventDefault()},{passive:false});
+addEventListener("pagehide",flush);document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
 $("#big").onclick=()=>$("#big").classList.remove("on");
 $("#bReset").onclick=()=>{const n=Object.keys(db).length,m=Object.keys(tr).length;
  if(!confirm("RESET ALL DATA?\n\nThis will permanently erase all "+n+" saved baby record(s), the recently deleted list ("+m+"), and the form on this device.\nThis cannot be undone.\n\nPress OK to erase everything."))return;
  if(!confirm("Final confirmation: erase ALL data now?"))return;
- db={};tr={};ord=[];cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
-$("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
+ clearTimeout(saveT);saveT=null;db={};tr={};ord=[];cur=null;persist();fill(null);setView(false);renderList();say("All data has been reset.")};
+$("#bDel").onclick=()=>{if(!cur){say("Nothing saved to delete.");return}if(confirm("Delete this record? You can restore it for 24 hours.")){clearTimeout(saveT);saveT=null;tr[cur]={rec:db[cur],del:Date.now()};delete db[cur];cur=null;persist();fill(null);setView(false);renderList();say("Deleted. Restore it from the sidebar within 24 hours.")}};
 $("#q").oninput=renderList;
 $("#bBak").onclick=()=>{$("#bakt").value=JSON.stringify(db);$("#dlg").classList.add("on")};
 $("#bClose").onclick=()=>$("#dlg").classList.remove("on");
