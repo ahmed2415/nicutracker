@@ -314,7 +314,7 @@ function card(){$("#card").innerHTML=cardHTML(collect())}
 $("#bNew").onclick=()=>{flush();cur=null;fill(null);setView(false);renderList();if(innerWidth<=720){SB="0";applySb()}};
 $("#bSave").onclick=()=>{clearTimeout(saveT);saveT=null;try{save()}catch(e){say("Save failed: "+((e&&e.message)||e))}};
 $("#bView").onclick=()=>setView(!document.body.classList.contains("cv"));
-$("#bAll").onclick=async()=>{const ks=Object.keys(db).sort();if(!ks.length){say("No saved babies to print.");return}
+$("#bAll").onclick=async()=>{const ks=Object.keys(db).sort((a,b)=>{const x=ord.indexOf(a),y=ord.indexOf(b);return x===y?(db[b].t||0)-(db[a].t||0):x-y});if(!ks.length){say("No saved babies to print.");return}
  $("#all").innerHTML=ks.map(k=>`<div class="cardx">${cardHTML(db[k])}</div>`).join("");
  await Promise.all([...$("#all").querySelectorAll("img")].map(i=>i.decode?i.decode().catch(()=>0):new Promise(r=>{i.onload=i.onerror=r})));
  await new Promise(r=>setTimeout(r,250));document.body.classList.add("pa");window.print()};
@@ -342,7 +342,7 @@ $("#bShare").onclick=async()=>{const r=collect();if(!r.f.name){say("Enter the ba
  let code;try{code=await pack({v:1,f:r.f,meds:r.meds,labs:r.labs,crps:r.crps,tsbs:r.tsbs})}catch(e){say("Could not create the share code.");return}
  $("#shc").value="Baby Record data. Open the app, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Share this baby";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
-$("#bAllX").onclick=async()=>{const ks=Object.keys(db);if(!ks.length){say("No saved babies to transfer.");return}
+$("#bAllX").onclick=async()=>{const ks=Object.keys(db).sort((a,b)=>{const x=ord.indexOf(a),y=ord.indexOf(b);return x===y?(db[b].t||0)-(db[a].t||0):x-y});if(!ks.length){say("No saved babies to transfer.");return}
  let code;try{code=await pack({v:2,babies:ks.map(k=>({f:db[k].f,meds:db[k].meds,labs:db[k].labs,crps:db[k].crps,tsbs:db[k].tsbs}))})}catch(e){say("Could not create the code.");return}
  $("#shc").value="Baby Record transfer ("+ks.length+" babies). Open the app on the other device, tap Import shared baby and paste this message:\n"+code;
  $("#shT").textContent="Transfer all babies";$("#bShSend").hidden=!navigator.share;$("#dlgS").classList.add("on");$("#shc").select()};
@@ -355,10 +355,10 @@ $("#bImpGo").onclick=async()=>{flush();let o,recs;
  try{o=await unpack($("#imc").value);recs=(o&&Array.isArray(o.babies)?o.babies:[o]).slice(0,5000).map(cleanRec)}catch(e){alert("That is not a valid Baby Record share message.");return}
  const clash=recs.filter(r=>db[r.f.name.toLowerCase()]).length;let rp=true;
  if(clash)rp=confirm(clash+" incoming record(s) have the same name as babies already saved here.\nOK = replace them with the incoming versions.\nCancel = keep both (incoming ones are saved as copies).");
- recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
+ const ik=[];recs.forEach(rec=>{let name=rec.f.name,k=name.toLowerCase();
   if(db[k]&&!rp){let nm=name+" (copy)",i=2;while(db[nm.toLowerCase()])nm=name+" (copy "+i++ +")";rec.f.name=nm;k=nm.toLowerCase()}
   else if(db[k])rec.imgs=db[k].imgs||[];
-  rec.t=Date.now();db[k]=rec;cur=k});
+  rec.t=Date.now();db[k]=rec;cur=k;ik.push(k)});ord=[...ik,...ord.filter(x=>!ik.includes(x))];
  persist();fill(db[cur]);setView(false);renderList();$("#dlgI").classList.remove("on");say(recs.length+" baby record(s) imported.")};
 let TH={m:null};try{TH=Object.assign(TH,JSON.parse(localStorage.getItem("nicu1theme")||"{}"))}catch(e){}
 function applyTheme(){const m=TH.m||(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=m;
